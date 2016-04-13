@@ -1,0 +1,116 @@
+---
+title: "Reproducible workflow and Version control with Git, Github, and R Markdown"
+author: "Ben Best"
+date: "April 13, 2016"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    #code_folding: hide
+    css: 
+      - libs/octicons-3.5.0/octicons.css             # https://octicons.github.com/
+      - libs/font-awesome-4.6.1/css/font-awesome.css # https://fortawesome.github.io/Font-Awesome
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(htmltools)
+```
+
+# Objectives
+
+## Today
+
+Here's an overview of techniques to be covered in Hadley Wickham and Garrett Grolemund of RStudio's forthcoming book [R for Data Science](http://r4ds.had.co.nz/):
+
+`r img(src='img/r4ds_data-science.png', width=500)`
+
+Today, we'll briefly skim across these topics, except for **Model**:
+
+- **Import**: `readr` to read in simple text files (as comma-seperated values, ie CSV)
+- **Tidy**: `tidyr` to organize rows of data into unique values
+- **Transform**: `dplyr` to manipulate data based on subsetting by rows or columns, sorting and joining
+- **Visualise**: 
+    - `ggplot2` static plots, using grammar of graphics principles
+    - `plotly` interactive plots, having hover, zoom and pan capabilities
+    - `tmaps` thematic maps, both static and interactive
+- **Communicate**
+    - online website with _Github Pages_
+    - version with _git_
+    - dynamic documents with _Rmarkdown_
+
+## This Morning
+
+1. Create Github login
+1. Create project website with Github Pages
+1. Edit README.md in Markdown
+1. Create HTML website content with R Markdown
+
+# Git and Github
+
+- **Git** is a version control system that lets you track changes to files over time. These files can be any kind of file (eg doc, pdf, xls), but free text differences are most easily visible (eg txt, csv, md). You can rollback changes made by you, or others. This facilitates a playground for collaboration, without fear of experimentation (you can always rollback changes).
+
+- **Github** is a website for storing your git versioned files remotely. It has many nice features to be able visualize differences between [images](https://help.github.com/articles/rendering-and-diffing-images/), [rendering](https://help.github.com/articles/mapping-geojson-files-on-github/) & [diffing](https://github.com/blog/1772-diffable-more-customizable-maps) map data files, [render text data files](https://help.github.com/articles/rendering-csv-and-tsv-data/), and [track changes in text](https://help.github.com/articles/rendering-differences-in-prose-documents/).
+
+## Setup Github & Git
+
+1. Create **Github** account at <http://github.com>, if you don't already have one. For username, I recommend all lower-case letters, short as you can. I recommned using your *ucsb.edu email, since you can request free private repositories via [GitHub Education](https://education.github.com/) discount.You're encouraged to upload a picture since it will get included in the students listing as part of this course repository.
+
+1. Configure **git** with global commands. Open up the Bash version of Git and type the following:
+
+        # display your version of git
+        git --version
+        
+        # replace USER with your Github user account
+        git config –-global user.name USER
+        
+        # replace USER@UMAIL.UCSB.EDU with the email you used to register with Github
+        git config –-global user.email USER@UMAIL.UCSB.EDU
+        
+        # list your config to confirm user.* variables set
+        git config --list
+
+## Github Workflows
+
+The two most common workflow models for working Github repositories is based on your permissions:
+
+1. **writable**: Push & Pull (simplest)
+
+1. **read only**: Fork & Pull Request (extra steps)
+
+#### Push & Pull
+
+repo location | `USER` permission | initialize <i class="fa fa-arrow-down"></i> | edit <i class="fa fa-arrow-up"></i> | update <i class="fa fa-arrow-down"></i>
+-----------|:-----------:|:-----------:|:-----------:|:-----------:
+<i class="fa fa-cloud"></i> `github.com/OWNER/REPO` | read + write | [**create**](https://help.github.com/articles/create-a-repo/) <span class="octicon octicon-plus"></span> |   |
+<i class="fa fa-desktop"></i> `~/github/REPO`      | read + write | [**clone**](https://help.github.com/articles/fetching-a-remote) <span class="octicon octicon-desktop-download"></span> | [**commit**](http://git-scm.com/docs/git-commit) <span class="octicon octicon-git-commit"></span>,  [**push**](https://help.github.com/articles/pushing-to-a-remote/) <span class="octicon octicon-cloud-upload"></span> | [**pull**](https://help.github.com/articles/fetching-a-remote/#pull) <span class="octicon octicon-cloud-download"></span>
+
+Note that OWNER could be either an individual USER or group ORGANIZATION, which has member USERs.
+
+### Fork & Pull Request
+
+repo location | `USER` permission | initialize <i class="fa fa-arrow-down"></i> | edit <i class="fa fa-arrow-up"></i> | update <i class="fa fa-arrow-down"></i>
+-----------|:-----------:|:-----------:|:-----------:|:-----------:
+<i class="fa fa-cloud"></i> `github.com/OWNER/REPO` | read only |  | [**merge**](https://help.github.com/articles/merging-a-pull-request) <span class="octicon octicon-git-merge"></span> [BB]  | 
+<i class="fa fa-cloud"></i> `github.com/OWNER/REPO`    | read + write | [**fork**](https://help.github.com/articles/fork-a-repo) <span class="octicon octicon-repo-forked"></span> | [**pull request**](https://help.github.com/articles/creating-a-pull-request/) <span class="octicon octicon-git-pull-request"></span> | [**pull request**](https://help.github.com/articles/creating-a-pull-request/) <span class="octicon octicon-git-pull-request"></span>, [**merge**](https://help.github.com/articles/merging-a-pull-request) <span class="octicon octicon-git-merge"></span>
+<i class="fa fa-desktop"></i> `~/github/REPO` | read + write | [**clone**](https://help.github.com/articles/fetching-a-remote) <span class="octicon octicon-desktop-download"></span> | [**commit**](http://git-scm.com/docs/git-commit) <span class="octicon octicon-git-commit"></span>,  [**push**](https://help.github.com/articles/pushing-to-a-remote/) <span class="octicon octicon-cloud-upload"></span> | [**pull**](https://help.github.com/articles/fetching-a-remote/#pull) <span class="octicon octicon-cloud-download"></span>
+
+## Create and Clone repository `my_project`
+
+Now you will create a Github repository for a project.
+
+1. [Create a repository](https://help.github.com/articles/create-a-repo/) called `my_project`.
+
+    `r img(src='img/github_repo-create.png', width=200)`
+    
+    Please be sure to tick the box to **Initialize this repository with a README**. I recommend a Description: Software Carpentry test project.
+    
+    `r img(src='img/github_create-my_project.png', width=500)`
+
+1. [Clone the repository](https://help.github.com/articles/fetching-a-remote) onto your local machine. You can do this either from the Bash Shell for Git with the command `git clone https://github.com/USER/REPO.git`, replacing USER with your Github username and REPO with my_project. Or you can use the Github Desktop App menu File -> Clone Repository...
+
+## Merge Conflicts
+
+[merge conflicts](http://r-pkgs.had.co.nz/git.html#git-pull)
+

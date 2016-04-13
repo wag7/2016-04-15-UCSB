@@ -1,1 +1,83 @@
-## Test
+---
+title: "Visualization in R"
+author: "Ben Best"
+date: "April 13, 2016"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Plots
+
+Grammar of Graphics
+
+## Static: `ggplot`
+
+* [Software Carpentry: R for reproducible scientific analysis - Creating publication quality graphics](http://swcarpentry.github.io/r-novice-gapminder/08-plot-ggplot2.html)
+
+
+```{r}
+library(gapminder)
+library(ggplot2)
+
+p = ggplot(data = gapminder, aes(x = lifeExp, y = gdpPercap)) +
+  geom_point()
+p
+```
+
+## Interactive: `plotly`
+
+[ggplot2 | plotly](https://plot.ly/ggplot2/)
+
+```{r}
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(plotly) # install.packages('plotly')
+})
+
+ggplotly(p)
+```
+
+# Maps: `tmap`
+
+Thematic maps
+
+- [**tmap**](https://github.com/mtennekes/tmap): a new packages for rapidly creating beautiful thematic maps 
+  - [tmap in a nutshell](https://cran.r-project.org/web/packages/tmap/vignettes/tmap-nutshell.html)
+  - [tmap modes: plot and interactive view](https://cran.r-project.org/web/packages/tmap/vignettes/tmap-modes.html)
+
+## Static
+
+```{r}
+library(tmap) # install.packages('tmap')
+
+data(World, metro)
+metro$growth <- (metro$pop2020 - metro$pop2010) / (metro$pop2010 * 10) * 100
+
+m <- tm_shape(World) +
+    tm_polygons("income_grp", palette="-Blues", contrast=.7, id="name", title="Income group") +
+    tm_shape(metro) +
+    tm_bubbles("pop2010", col = "growth", 
+               border.col = "black", border.alpha = .5, 
+               style="fixed", breaks=c(-Inf, seq(0, 6, by=2), Inf),
+               palette="-RdYlBu", contrast=1, 
+               title.size="Metro population", 
+               title.col="Growth rate (%)", id="name") + 
+    tm_style_gray() + tm_format_World()
+m
+```
+
+## Interactive
+
+```{r}
+tmap_leaflet(m)
+```
+
+
