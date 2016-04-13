@@ -60,6 +60,7 @@
   - * [How I build up a ggplot2 figure | A HopStat and Jump Away](https://hopstat.wordpress.com/2016/02/18/how-i-build-up-a-ggplot2-figure/)
 
 - Other resources
+  - [R Spatial Tips | Spatial.ly](http://spatial.ly/r/)
   - [A Practical Guide to Geostatistical Mapping](http://www.lulu.com/shop/tomislav-hengl/a-practical-guide-to-geostatistical-mapping/ebook/product-17389015.html)
   - [Geospatial Analysis - spatial and GIS analysis techniques and GIS software](http://www.spatialanalysisonline.com/)
   - [CRAN Task View: Analysis of Spatial Data](https://cran.r-project.org/web/views/Spatial.html)

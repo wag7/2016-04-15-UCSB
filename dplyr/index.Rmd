@@ -138,6 +138,8 @@ The "tee" operator `%T>%` is similar to the "then" operator `%>%` in that the le
 
 The `tidyr` and `dplyr` packages were created by [Hadley Wickham](https://github.com/hadley) of `ggplot2` fame. The "gg" in `ggplot2` stands for the "grammar of graphics". Hadley similarly considers the functionality of the two packages `dplyr` and `tidyr` to provide the "grammar of data manipulation".
 
+* [Week 4: Tidying up Data](http://ucsb-bren.github.io/env-info/wk04_tidyr.html) - [Rmd](https://github.com/ucsb-bren/env-info/blob/gh-pages/wk04_tidyr.Rmd)
+* [Data wrangling with dplyr and tidyr](http://bbest.github.io/dplyr-tidyr-tutorial/) - [Rmd](https://github.com/bbest/dplyr-tidyr-tutorial/blob/gh-pages/index.Rmd)
 
 # `readr`
 
