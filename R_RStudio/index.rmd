@@ -637,13 +637,13 @@ for (gap_cont in unique(gapminder$continent)){ # gap_cont = 'Africa'
 
 Rather than printing the results, we could write the loop output to a new object.
 ```{r}
-output_vector <- c()
+continent_mean_lifeExp <- c()
 for (gap_cont in unique(gapminder$continent)){  # gap_cont = 'Africa'
-  temp          <-  subset(gapminder, continent == gap_cont) 
-  temp_output   <-  paste(gap_cont, mean(temp$lifeExp))
-  output_vector <- c(output_vector, temp_output)
+  temp                   <-  subset(gapminder, continent == gap_cont) 
+  temp_output            <-  paste(gap_cont, mean(temp$lifeExp))
+  continent_mean_lifeExp <- c(continent_mean_lifeExp, temp_output)
 }
-output_vector
+continent_mean_lifeExp
 ```
 
 This approach can be useful, but 'growing your results' (building
@@ -707,12 +707,12 @@ if (x >= 10) {
 }
 
 ## practice a for loop
-output_vector <- c()
+continent_mean_lifeExp <- c()
 for (gap_cont in unique(gapminder$continent)){  # gap_cont = 'Africa'
-  temp          <-  subset(gapminder, continent == gap_cont) 
-  temp_output   <-  paste(gap_cont, mean(temp$lifeExp))
-  output_vector <- c(output_vector, temp_output)
+  temp                   <-  subset(gapminder, continent == gap_cont) 
+  temp_output            <-  paste(gap_cont, mean(temp$lifeExp))
+  continent_mean_lifeExp <- c(continent_mean_lifeExp, temp_output)
 }
-output_vector
+continent_mean_lifeExp
 ```
 

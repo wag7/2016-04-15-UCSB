@@ -315,7 +315,7 @@ help(seq) # same as ?seq</code></pre>
 <pre class="r"><code>??install </code></pre>
 <p>Not all functions have (or require) arguments:</p>
 <pre class="r"><code>date()</code></pre>
-<pre><code>## [1] &quot;Thu Apr 14 16:36:15 2016&quot;</code></pre>
+<pre><code>## [1] &quot;Thu Apr 14 16:40:07 2016&quot;</code></pre>
 <p>Now look at your workspace – in the upper right pane. The workspace is where user-defined objects accumulate. You can also get a listing of these objects with commands:</p>
 <pre class="r"><code>objects()</code></pre>
 <pre><code>## [1] &quot;jenny_rocks&quot;                &quot;this_is_a_really_long_name&quot;
@@ -692,7 +692,7 @@ if (x &gt;= 10) {
 }
 
 x
-## [1] 9</code></pre>
+## [1] 4</code></pre>
 <p>Note you may not get the same output as your neighbour because you may be sampling different random numbers from the same distribution.</p>
 <p>Let’s go a step further:</p>
 <pre class="r"><code>x &lt;- rpois(1, lambda=8)
@@ -763,13 +763,13 @@ if (2002 %in% gapminder$year) {
 ## [1] &quot;mean life expectency for Americas is 64.6587366666667&quot;
 ## [1] &quot;mean life expectency for Oceania is 74.3262083333333&quot;</code></pre>
 <p>Rather than printing the results, we could write the loop output to a new object.</p>
-<pre class="r"><code>output_vector &lt;- c()
+<pre class="r"><code>continent_mean_lifeExp &lt;- c()
 for (gap_cont in unique(gapminder$continent)){  # gap_cont = 'Africa'
-  temp          &lt;-  subset(gapminder, continent == gap_cont) 
-  temp_output   &lt;-  paste(gap_cont, mean(temp$lifeExp))
-  output_vector &lt;- c(output_vector, temp_output)
+  temp                   &lt;-  subset(gapminder, continent == gap_cont) 
+  temp_output            &lt;-  paste(gap_cont, mean(temp$lifeExp))
+  continent_mean_lifeExp &lt;- c(continent_mean_lifeExp, temp_output)
 }
-output_vector
+continent_mean_lifeExp
 ## [1] &quot;Asia 60.0649032323232&quot;     &quot;Europe 71.9036861111111&quot;  
 ## [3] &quot;Africa 48.8653301282051&quot;   &quot;Americas 64.6587366666667&quot;
 ## [5] &quot;Oceania 74.3262083333333&quot;</code></pre>
@@ -828,13 +828,13 @@ if (x &gt;= 10) {
 }
 
 ## practice a for loop
-output_vector &lt;- c()
+continent_mean_lifeExp &lt;- c()
 for (gap_cont in unique(gapminder$continent)){  # gap_cont = 'Africa'
-  temp          &lt;-  subset(gapminder, continent == gap_cont) 
-  temp_output   &lt;-  paste(gap_cont, mean(temp$lifeExp))
-  output_vector &lt;- c(output_vector, temp_output)
+  temp                   &lt;-  subset(gapminder, continent == gap_cont) 
+  temp_output            &lt;-  paste(gap_cont, mean(temp$lifeExp))
+  continent_mean_lifeExp &lt;- c(continent_mean_lifeExp, temp_output)
 }
-output_vector</code></pre>
+continent_mean_lifeExp</code></pre>
 </div>
 </div>
 
