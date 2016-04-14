@@ -190,7 +190,7 @@ rm(list = ls())
 
 or click the broom in RStudio's Environment pane.
 
-> Exercise: Clear your workspace, then create a few new variables. Discuss what makes a good filename.
+> Exercise: Clear your workspace, then create a few new variables. Discuss what makes a good filename. Hint: give variables short informative names (`lifeExp` versus "X5")
 
 ## History, working directory, scripts 
 
@@ -454,21 +454,6 @@ barplot(table(gapminder$continent))
 > Exercise: Explore `gapminder$gdpPercap`. What commands do you use? 
 
 
-In the figures below, we see how factors can be put to work in figures. The `continent` factor is easily mapped into "facets" or colors and a legend by the `ggplot2` package. *Making figures with `ggplot2` is covered tomorrow so feel free to just sit back and enjoy these plots or blindly copy/paste.*
-```{r factors-nice-for-plots, fig.show = 'hold', out.width = '49%'}
-## illustrative plot with ggplot2 (we'll learn this tomorrow)
-library(ggplot2) # install.packages("ggplot2")
-p <- ggplot(subset(gapminder, continent != "Oceania"),
-            aes(x = gdpPercap, y = lifeExp)) # initializes stuff
-p <- p + scale_x_log10() # log the x axis the right way
-p + geom_point() # scatterplot
-p + geom_point(aes(color = continent)) # map continent to color
-p + geom_point(alpha = (1/3), size = 3) + geom_smooth(lwd = 3, se = FALSE)
-p + geom_point(alpha = (1/3), size = 3) + facet_wrap(~ continent) +
-  geom_smooth(lwd = 1.5, se = FALSE)
-```
-
-
 ## `subset()` to isolate bits of data.frames
 
 There is a stand-alone function called `subset()`, that can isolate pieces of an object for inspection or assignment. `subset()`'s main argument is also (unfortunately) called `subset`.
@@ -507,70 +492,9 @@ x = subset(gapminder, subset = year == 2007)
 str(x)
 ```
 
-## nested functions and magrittr %>%
+## for loops (intro'd by Remi)
 
-Let's return to our barplot call and talk about nested functions. This command has 2 functions: they happen from the inside-out like mathmatical order of operations (PEMDAS). We can take advantage of white space in scripts to help look at these. RStudio has automatic indentation to help. 
-```{r eval=FALSE}
-barplot(table(gapminder$continent)) # nested, hard to read
-
-barplot(
-  table(gapminder$continent)) # whitespace/indentation - slightly easier to read
-```
-
-But you can do a lot more than 2: 
-```{r eval=FALSE}
-barplot(table(sample(head(gapminder$continent, 100)))) # getting pretty miserable
-
-barplot(
-  table(
-    sample(
-      head(gapminder$continent, 100)))) # a lot of ))) to keep track of
-```
-
-
-This can get quite confusing when there multiple functions with multiple arguments. I won't even try to write it without whitespace.  
-```{r eval=FALSE}
-barplot(
-  table(
-    sample(
-      head(gapminder$continent, 100), # the data, hooray! 
-      replace = FALSE, 
-      prob    = NULL)),               # a lot of ))'s and ,'s
-  xlab = 'continents',                # yikes, these are barplot arguments!
-  ylab = 'count') 
-```
-
-A few confusing things about nesting at a glance: 
-
-- the actual data we're working with (gapminder$continent) is not immediately obvious
-- a lot of )) closing parentheses to keep track of
-- a lot of possibility for error
-
-
-Enter `magrittr`'s "then" operator: %>%
-
-`%>%` which transfers the output on the left to the first argument of the function on the right. This is very powerful when chaining together many operations on the same data frame. We're able to efficiently write out operations, get past the previous problem of multiple variable names without the obfuscation of nesting. 
-```{r eval=FALSE}
-library(magrittr) # install.packages('magrittr')
-
-gapminder$continent %>%    # start with the data
-  head(100) %>%            # before this was head(data, 100); %>% passes data 
-  sample(replace = FALSE,  # arguments nicely with the function name
-         prob    = NULL) %>%
-  table() %>%
-  barplot(xlab = 'continents', 
-          ylab = 'count')  # arguments nicely with the function name
-
-```
-
-Benefits to %>%
-
-- readable like a story
-- indentation makes it easier on the eyes
-- fewer commas, multi-parentheses 
-- arguments are associated with their function
-
-> Exercise: Use `%>%` and `head()` to visualize `gapminder$gdpPercap`. How would you plot it?
+## if statments (not intro'd by Remi)
 
 
 ## clean up and save your .r script
@@ -612,63 +536,8 @@ levels(gapminder$continent)
 nlevels(gapminder$continent)
 barplot(table(gapminder$continent))
 
-## illustrative plot with ggplot2 (we'll learn this tomorrow) ----
-library(ggplot2) # install.packages("ggplot2")
-p <- ggplot(subset(gapminder, continent != "Oceania"),
-            aes(x = gdpPercap, y = lifeExp)) # initializes stuff
-p <- p + scale_x_log10() # log the x axis the right way
-p + geom_point() # scatterplot
-p + geom_point(aes(color = continent)) # map continent to color
-p + geom_point(alpha = (1/3), size = 3) + geom_smooth(lwd = 3, se = FALSE)
-p + geom_point(alpha = (1/3), size = 3) + facet_wrap(~ continent) +
-  geom_smooth(lwd = 1.5, se = FALSE)
-
 ## subset gapminder. Self documenting!
 subset(gapminder, subset = country == "Mexico",
        select = c(country, year, lifeExp)) # ?c: combines values
-
-
-## the beautiful 'then' operator %>% ----
-
-## confusing nested way...
-barplot(
-  table(
-    sample(
-      head(gapminder$continent, 100),
-      replace = FALSE,
-      prob    = NULL)),
-  xlab = 'continents',
-  ylab = 'count')
-
-## elegant chained way %>% 
-library(magrittr) # install.packages('magrittr')
-gapminder$continent %>%    # start with the data
-  head(100) %>%            # before this was head(data, 100); %>% passes data
-  sample(replace = FALSE,  # arguments nicely with the function name
-         prob    = NULL) %>%
-  table() %>%
-  barplot(xlab = 'continents',
-          ylab = 'count')  # no ))) or ,
-
 ```
-
-
-## Review of data.frames so far
-
-Use data.frames!!!
-
-Important practices
-
-  * in your analyses, do computations or make figures *in situ* -- don't create little copies and excerpts of your data. This will leave a cleaner workspace and cleaner code.
-  * use %>% so that your code is easier to read and fairly self-documenting
-  * give variables short informative names (`lifeExp` versus "X5")
-  * refer to variables by name, not by column number
-  
-This will produce code that is self-documenting and more robust. Variable names often propagate to downstream outputs like figures and numerical tables and therefore good names have a positive multiplier effect throughout an analysis.
-
-The most modern, slick way to work with data.frame is with the `dplyr` package. We will cover this tomorrow. Further reference is 
-
-  * [Introduction to dplyr](http://stat545.com/block009_dplyr-intro.html)
-  * [`dplyr` functions for a single dataset](http://stat545.com/block010_dplyr-end-single-table.html)
-  * [Cheatsheet for `dplyr` joins](http://stat545.com/bit001_dplyr-cheatsheet.html), i.e. "two table" operations
 
