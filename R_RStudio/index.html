@@ -315,7 +315,7 @@ help(seq) # same as ?seq</code></pre>
 <pre class="r"><code>??install </code></pre>
 <p>Not all functions have (or require) arguments:</p>
 <pre class="r"><code>date()</code></pre>
-<pre><code>## [1] &quot;Thu Apr 14 14:35:35 2016&quot;</code></pre>
+<pre><code>## [1] &quot;Thu Apr 14 16:36:15 2016&quot;</code></pre>
 <p>Now look at your workspace – in the upper right pane. The workspace is where user-defined objects accumulate. You can also get a listing of these objects with commands:</p>
 <pre class="r"><code>objects()</code></pre>
 <pre><code>## [1] &quot;jenny_rocks&quot;                &quot;this_is_a_really_long_name&quot;
@@ -663,14 +663,118 @@ subset(gapminder, subset = country == &quot;Uruguay&quot;) # Ah, inspecting Urug
 4. How do you know?</p>
 </blockquote>
 <pre class="r"><code># one potential exercise answer, no peeking
-x = subset(gapminder, subset = year == 2007) 
-str(x)</code></pre>
+gap2007 = subset(gapminder, subset = year == 2007) 
+str(gap2007)</code></pre>
 </div>
-<div id="for-loops-introd-by-remi" class="section level2">
-<h2><span class="header-section-number">2.3</span> for loops (intro’d by Remi)</h2>
+<div id="conditional-statements-with-if-and-else" class="section level2">
+<h2><span class="header-section-number">2.3</span> conditional statements with <code>if</code> and <code>else</code></h2>
+<p>Often when we’re coding we want to control the flow of our actions. This can be done by setting actions to occur only if a condition or a set of conditions are met. Alternatively, we can also set an action to occur a particular number of times.</p>
+<p>There are several ways you can control flow in R. For conditional statements, the most commonly used approaches are the constructs:</p>
+<pre class="r"><code># if
+if (condition is true) {
+  perform action
+}
+
+# if ... else
+if (condition is true) {
+  perform action
+} else {  # that is, if the condition is false,
+  perform alternative action
+}</code></pre>
+<p>Say, for example, that we want R to print a message if the variable we just created has a has a particular value. The value I created was called <code>gap2007</code></p>
+<pre class="r"><code># sample a random number from a Poisson distribution
+# with a mean (lambda) of 8
+
+x &lt;- rpois(1, lambda=8)
+
+if (x &gt;= 10) {
+  print(&quot;x is greater than or equal to 10&quot;)
+}
+
+x
+## [1] 9</code></pre>
+<p>Note you may not get the same output as your neighbour because you may be sampling different random numbers from the same distribution.</p>
+<p>Let’s go a step further:</p>
+<pre class="r"><code>x &lt;- rpois(1, lambda=8)
+
+if (x &gt;= 10) {
+  print(&quot;x is greater than or equal to 10&quot;)
+} else if (x &gt; 5) {
+  print(&quot;x is greater than 5&quot;)
+} else {
+  print(&quot;x is less than 5&quot;)
+}
+## [1] &quot;x is greater than or equal to 10&quot;</code></pre>
+<p><strong>Important:</strong> when R evaluates the condition inside <code>if</code> statements, it is looking for a logical element, i.e., <code>TRUE</code> or <code>FALSE</code>. This can cause some headaches. For example:</p>
+<pre class="r"><code>x  &lt;-  4 == 3
+if (x) {
+  &quot;4 equals 3&quot;
+}</code></pre>
+<p>As we can see, the message was not printed because the vector x is <code>FALSE</code></p>
+<pre class="r"><code>x &lt;- 4 == 3
+x
+## [1] FALSE</code></pre>
+<blockquote>
+<p>Exercise Use an <code>if</code> statement to print a suitable message reporting whether there are any records from 2002 in the <code>gapminder</code> dataset. Now do the same for 2012.</p>
+</blockquote>
+<p>Did anyone get a warning message like this?</p>
+<pre class="r"><code>if (gapminder$year == 2002) {
+  print('this will only check the first element in gapminder$year')
+  }
+## Warning in if (gapminder$year == 2002) {: the condition has length &gt; 1 and
+## only the first element will be used</code></pre>
+<p>If your condition evaluates to a vector with more than one logical element, the function <code>if</code> will still run, but will only evaluate the condition in the first element. Remember our analogy about spoken language? This is when R understood your command, but flagging that you may have misspoken. R isn’t saying ‘what!?’ (that’s an error message), it’s saying ‘I understood what you said, but I want to alert you that it might not be what you meant’. These warning messages can be really helpful, but you can’t rely that they will catch all misinterpretations.</p>
+<p>We’ll make a n case you wanted to just do a quick check to see if 2002 was even in the gapminder data, you could use <code>any</code> or <code>%in%</code></p>
+<pre class="r"><code>if (any(gapminder$year == 2002)) {
+  print('yes 2002 is included at least once in gapminder')
+}
+## [1] &quot;yes 2002 is included at least once in gapminder&quot;
+
+if (2002 %in% gapminder$year) {
+  print('yes 2002 is included at least once in gapminder')
+  }
+## [1] &quot;yes 2002 is included at least once in gapminder&quot;</code></pre>
 </div>
-<div id="if-statments-not-introd-by-remi" class="section level2">
-<h2><span class="header-section-number">2.4</span> if statments (not intro’d by Remi)</h2>
+<div id="repeating-operations-with-for-loops" class="section level2">
+<h2><span class="header-section-number">2.4</span> Repeating operations with for loops</h2>
+<p>If you want to iterate over a set of values, and perform the same operation on each, a <code>for</code> loop will do the job. We saw <code>for</code> loops in the shell lessons earlier.</p>
+<p>The basic structure of a <code>for</code> loop is:</p>
+<pre class="r"><code>for(iterator in set of values){
+  do a thing
+}</code></pre>
+<p>For example:</p>
+<pre class="r"><code>for(i in 1:10){
+  print(i)
+}</code></pre>
+<p>The <code>1:10</code> bit creates a vector on the fly; you can iterate over any other vector as well.</p>
+<p>We can use a <code>for</code> loop nested within another <code>for</code> loop to iterate over two things at once.</p>
+<pre class="r"><code>for (i in 1:5){
+  for(j in c('a', 'b', 'c', 'd', 'e')){
+    print(paste(i,j))
+  }
+}</code></pre>
+<pre class="r"><code>for (gap_cont in unique(gapminder$continent)){ # gap_cont = 'Africa'
+  temp &lt;-  subset(gapminder, continent == gap_cont) 
+  print(paste('mean life expectency for', gap_cont, 'is', mean(temp$lifeExp)))
+}
+## [1] &quot;mean life expectency for Asia is 60.0649032323232&quot;
+## [1] &quot;mean life expectency for Europe is 71.9036861111111&quot;
+## [1] &quot;mean life expectency for Africa is 48.8653301282051&quot;
+## [1] &quot;mean life expectency for Americas is 64.6587366666667&quot;
+## [1] &quot;mean life expectency for Oceania is 74.3262083333333&quot;</code></pre>
+<p>Rather than printing the results, we could write the loop output to a new object.</p>
+<pre class="r"><code>output_vector &lt;- c()
+for (gap_cont in unique(gapminder$continent)){  # gap_cont = 'Africa'
+  temp          &lt;-  subset(gapminder, continent == gap_cont) 
+  temp_output   &lt;-  paste(gap_cont, mean(temp$lifeExp))
+  output_vector &lt;- c(output_vector, temp_output)
+}
+output_vector
+## [1] &quot;Asia 60.0649032323232&quot;     &quot;Europe 71.9036861111111&quot;  
+## [3] &quot;Africa 48.8653301282051&quot;   &quot;Americas 64.6587366666667&quot;
+## [5] &quot;Oceania 74.3262083333333&quot;</code></pre>
+<p>This approach can be useful, but ‘growing your results’ (building the result object incrementally) is computationally inefficient, so avoid it when you are iterating through a lot of values.</p>
+<p>For loops can also lead to temporary variables that you don’t need. Tomorrow we will learn about a few packages that will help your data wrangling well beyond for loops!</p>
 </div>
 <div id="clean-up-and-save-your-.r-script" class="section level2">
 <h2><span class="header-section-number">2.5</span> clean up and save your .r script</h2>
@@ -710,7 +814,27 @@ barplot(table(gapminder$continent))
 
 ## subset gapminder. Self documenting!
 subset(gapminder, subset = country == &quot;Mexico&quot;,
-       select = c(country, year, lifeExp)) # ?c: combines values</code></pre>
+       select = c(country, year, lifeExp)) # ?c: combines values
+
+## practice an if statement
+x &lt;- rpois(1, lambda=8)
+
+if (x &gt;= 10) {
+  print(&quot;x is greater than or equal to 10&quot;)
+} else if (x &gt; 5) {
+  print(&quot;x is greater than 5&quot;)
+} else {
+  print(&quot;x is less than 5&quot;)
+}
+
+## practice a for loop
+output_vector &lt;- c()
+for (gap_cont in unique(gapminder$continent)){  # gap_cont = 'Africa'
+  temp          &lt;-  subset(gapminder, continent == gap_cont) 
+  temp_output   &lt;-  paste(gap_cont, mean(temp$lifeExp))
+  output_vector &lt;- c(output_vector, temp_output)
+}
+output_vector</code></pre>
 </div>
 </div>
 
