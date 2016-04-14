@@ -155,6 +155,8 @@ The help page tells the name of the package in the top left, and broken down int
 
 The examples can be copy-pasted into the console for you to understand what's going on. Let's try it. 
 
+> Exercise: Look up the help file for a function you know. For example, `?getwd()`, `?plot()`.
+
 
 Help for when you only sort of remember the function name: double-questionmark:
 ```{r}
@@ -187,6 +189,8 @@ rm(list = ls())
 ```
 
 or click the broom in RStudio's Environment pane.
+
+> Exercise: Clear your workspace, then create a few new variables. Discuss what makes a good filename.
 
 ## History, working directory, scripts 
 
@@ -383,6 +387,10 @@ A statistical overview can be obtained with `summary()`
 summary(gapminder)
 ```
 
+### Discussion
+What other information would you want to know when first exploring new data? 
+...How about plotting to see if these data make sense/have outliers?
+
 Although we haven't begun our formal coverage of visualization yet, it's so important for smell-testing dataset that we will make a few figures anyway. Here we use only base R graphics, which are very basic.
 
 ```{r first-plots-base-R}
@@ -421,9 +429,7 @@ table(gapminder$year) # look at it another way, still not so interesting
 
 The variables for country and continent hold truly categorical information, which is stored as a *factor* in R.
 ```{r}
-
 ## explore factor variable
-
 str(gapminder) # ah yes, $continent is a factor.
 class(gapminder$continent) # you could also tell with class()
 summary(gapminder$continent)
@@ -444,6 +450,9 @@ Here we count how many observations are associated with each continent and, as u
 table(gapminder$continent)
 barplot(table(gapminder$continent))
 ```
+
+> Exercise: Explore `gapminder$gdpPercap`. What commands do you use? 
+
 
 In the figures below, we see how factors can be put to work in figures. The `continent` factor is easily mapped into "facets" or colors and a legend by the `ggplot2` package. *Making figures with `ggplot2` is covered tomorrow so feel free to just sit back and enjoy these plots or blindly copy/paste.*
 ```{r factors-nice-for-plots, fig.show = 'hold', out.width = '49%'}
@@ -487,12 +496,11 @@ subset(gapminder, subset = country == "Mexico",
        select = c(country, year, lifeExp)) # ?c: combines values into a vector or list
 ```
 
-Your turn. Here is an exercise:
-
-1. Get data just from 2007. 
-2. Assign this to a variable. 
-3. How many rows are there? 
-4. How do you know?
+> Exercise:  
+1. Get data just from 2007.   
+2. Assign this to a variable.   
+3. How many rows are there?   
+4. How do you know?  
 ```{r exercise-answer, eval=FALSE}
 # one potential exercise answer, no peeking
 x = subset(gapminder, subset = year == 2007) 
@@ -561,6 +569,9 @@ Benefits to %>%
 - indentation makes it easier on the eyes
 - fewer commas, multi-parentheses 
 - arguments are associated with their function
+
+> Exercise: Use `%>%` and `head()` to visualize `gapminder$gdpPercap`. How would you plot it?
+
 
 ## clean up and save your .r script
 
