@@ -3,7 +3,7 @@ title: Student Listing
 layout: page
 ---
 
-[Add yourself!](https://github.com/ucsb-bren/env-info#readme)
+[Add yourself!](https://github.com/remi-daigle/2016-04-15-UCSB/tree/gh-pages/_data#introduce-yourself)
 
 <!-- based on http://git.io/vvroy -->
 <ul>
