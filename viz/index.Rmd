@@ -180,6 +180,8 @@ m = gvisMotionChart(
 plot(m)
 ```
 
+**Your Turn**: Repeat the motion chart with the country having the highest `gdpPercap` filtered out.
+
 # Maps: `tmap`
 
 Thematic maps
