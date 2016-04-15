@@ -12,34 +12,36 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-if (interactive()){
-  if ('./viz' %in% list.dirs()){
-    setwd('viz')
-  }
-  View(gapminder)
+library(htmltools)
+if ('./viz' %in% list.dirs()){
+  setwd('viz')
 }
 ```
 
 # Plots
 
+Inspiring people:
+
 - [**Hadley Wickham**](http://hadley.nz): grammar of graphics
 
-- [**Hans Rosling**](https://www.ted.com/speakers/hans_rosling): GapMinder
+    `r img(src='https://avatars1.githubusercontent.com/u/4196', width=200)`
 
-  ![](img/hans-rosling_sexy-stats.jpeg)
+- [**Hans Rosling**](https://www.ted.com/speakers/hans_rosling): Gapminder
 
-[Gapminder World](http://www.gapminder.org/world) - Wealth & Health of Nations
+    ![](img/hans-rosling_sexy-stats.jpeg)
 
-![](img/gapminder-world_motion-chart.png)
+    [Gapminder World](http://www.gapminder.org/world) - Wealth & Health of Nations
+
+    [![](img/gapminder-world_motion-chart.png)](http://www.gapminder.org/world)
 
 
 ## Static: `ggplot`
 
-* [Creating publication quality graphics - Software Carpentry: R for reproducible scientific analysis](http://swcarpentry.github.io/r-novice-gapminder/08-plot-ggplot2.html)
+* [Creating publication quality graphics - Software Carpentry](http://swcarpentry.github.io/r-novice-gapminder/08-plot-ggplot2.html)
 
 ### Scatterplot
 
-```{r, message=F, warning=F}
+```{r, message=F, warning=F, results='hide'}
 library(dplyr)
 library(ggplot2)
 library(gapminder)
@@ -49,7 +51,9 @@ gapminder
 
 # get range of available data
 summary(gapminder)
+```
 
+```{r, message=F, warning=F}
 # setup dataframe
 g = gapminder %>%
   filter(year==2007) %>%   # most recent year 
@@ -238,3 +242,4 @@ tmap_leaflet(m)
 - [Interactive Plots and Maps - Environmental Informatics](http://ucsb-bren.github.io/env-info/wk06_widgets.html)
 - [Graphs with ggplot2 - Cookbook for R](http://www.cookbook-r.com/Graphs/#graphs-with-ggplot2)
 - [ggplot2 Essentials - STHDA](http://www.sthda.com/english/wiki/ggplot2-essentials)
+- [NEON Working with Geospatial Data](http://neon-workwithdata.github.io/NEON-R-Spatio-Temporal-Data-and-Management-Intro/)
