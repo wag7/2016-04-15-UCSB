@@ -355,28 +355,94 @@ git config --list</code></pre></li>
 </table>
 </div>
 </div>
-<div id="create-and-clone-repository-my_project" class="section level2">
-<h2><span class="header-section-number">2.3</span> Create and Clone repository <code>my_project</code></h2>
+<div id="create-repository-my-project" class="section level2">
+<h2><span class="header-section-number">2.3</span> Create Repository <code>my-project</code></h2>
 <p>Now you will create a Github repository for a project.</p>
 <ol style="list-style-type: decimal">
-<li><p><a href="https://help.github.com/articles/create-a-repo/">Create a repository</a> called <code>my_project</code>.</p>
+<li><p><a href="https://help.github.com/articles/create-a-repo/">Create a repository</a> called <code>my-project</code>.</p>
 <p><img src="img/github_repo-create.png" width="200"/></p>
-<p>Please be sure to tick the box to <strong>Initialize this repository with a README</strong>. I recommend a Description: Software Carpentry test project.</p>
-<p><img src="img/github_create-my_project.png" width="500"/></p></li>
-<li><p><a href="https://help.github.com/articles/fetching-a-remote">Clone the repository</a> onto your local machine. You can do this either from the Bash Shell for Git with the command <code>git clone https://github.com/USER/REPO.git</code>, replacing USER with your Github username and REPO with my_project. Or you can use the Github Desktop App menu File -&gt; Clone Repository…</p></li>
+<p>Please be sure to tick the box to <strong>Initialize this repository with a README</strong>. Otherwise defaults are fine.</p>
+<p><img src="img/github_create-my-project.png" width="600"/></p></li>
+<li><p><a href="https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/">Create a branch</a> called <code>gh-pages</code>.</p>
+<p><img src="img/github_create-branch_gh-pages.png" width="200"/></p>
+<p>Per <a href="https://pages.github.com">pages.github.com</a>, since this will be a project site only web files in the <code>gh-pages</code> branch will show up at <code>http://USER.github.io/REPO</code>. For a user (or organization) site, the REPO must be named <code>USER.github.io</code> (or <code>ORG.github.io</code>) and then the default <code>master</code> branch will contain the web files for the website <code>http://USER.github.io</code> (or <code>http://ORG.github.io</code>). See also <a href="https://help.github.com/articles/user-organization-and-project-pages/">User, Organization, and Project Pages - Github Help</a>.</p></li>
+<li><p><a href="https://help.github.com/articles/setting-the-default-branch/">Set the default branch</a> to <code>gh-pages</code>, NOT the default <code>master</code>.</p>
+<p><img src="img/github_default-branch_gh-pages.png" width="600"/></p></li>
+<li><p><a href="https://help.github.com/articles/viewing-branches-in-your-repository/#deleting-branches">Delete the branch</a> <code>master</code>, which will not be used.</p></li>
 </ol>
 </div>
-<div id="populate-with-rmarkdown" class="section level2">
-<h2><span class="header-section-number">2.4</span> Populate with Rmarkdown</h2>
+<div id="edit-readme.md-in-markdown" class="section level2">
+<h2><span class="header-section-number">2.4</span> Edit <code>README.md</code> in Markdown</h2>
+<p><a href="https://help.github.com/articles/create-a-repo/#commit-your-first-change">Commit your first change</a> by editing the <code>README.md</code> which is in <strong>markdown</strong>, simple syntax for conversion to HTML. Now update the contents of the <code>README.md</code> with the following, having a link and a numbered list:</p>
+<pre><code># my-project
+
+Playing with [Software Carpentry at UCSB](http://remi-daigle.github.io/2016-04-15-UCSB).
+
+## Introduction
+
+This repository demonstrates **software** and _formats_:
+
+1. **Git**
+1. **Github**
+1. _Markdown_
+1. _Rmarkdown_
+
+## Conclusion
+
+![](https://octodex.github.com/images/labtocat.png)</code></pre>
+<p>Now click on the <span class="octicon octicon-eye"></span> Preview changes to see the markdown rendered as HTML:</p>
+<p><img src="img/github_preview_README-md.png" width="500"/></p>
+<p>Notice the syntax for:</p>
 <ul>
-<li>File -&gt; New File -&gt; Rmarkdown…</li>
-<li>Save as index</li>
-<li>Knit</li>
+<li><strong>numbered list</strong> gets automatically sequenced: <code>1.</code>, <code>1.</code></li>
+<li><strong>headers</strong> get rendered at multiple levels: <code>#</code>, <code>##</code></li>
+<li><strong>link</strong>: <code>[](http://...)</code></li>
+<li><strong>image</strong>: <code>![](http://...)</code></li>
+<li><em>italics</em>: <code>_word_</code></li>
+<li><strong>bold</strong>: <code>**word**</code></li>
 </ul>
-<p>More: - <a href="../cheatsheets/rmarkdown-cheatsheet.pdf">rmarkdown-cheatsheet.pdf</a> - <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a></p>
+<p>See <a href="https://guides.github.com/features/mastering-markdown/">Mastering Markdown · GitHub Guides</a> and add some more personalized content to the README of your own, like a bulleted list or blockquote.</p>
+</div>
+<div id="clone-repository" class="section level2">
+<h2><span class="header-section-number">2.5</span> Clone Repository</h2>
+<p><a href="https://help.github.com/articles/fetching-a-remote">Clone the repository</a> onto your local machine. The easiest way to do this is simply clicking the button <span class="octicon octicon-desktop-download"></span> to open up the Github Desktop App.</p>
+<p><img src="img/github_clone-desktop.png" width="300"/></p>
+<p>You’ll be prompted to clone this repository into a folder on your local machine. I recommend creating a folder <code>github</code> under your user folder.</p>
+<p>See <a href="https://help.github.com/desktop/guides/">GitHub Desktop User Guides</a> for more. You could also do this from the Bash Shell for Git with the command <code>git clone https://github.com/USER/REPO.git</code>, replacing USER with your Github username and REPO with my_project. Or you can use the Github Desktop App menu File -&gt; Clone Repository…</p>
+</div>
+</div>
+<div id="rmarkdown-from-rstudio" class="section level1">
+<h1><span class="header-section-number">3</span> Rmarkdown from RStudio</h1>
+<div id="create-rstudio-project" class="section level2">
+<h2><span class="header-section-number">3.1</span> Create RStudio Project</h2>
+<p>Open RStudio and under the menu File -&gt; New Project… -&gt; Existing Directory. Browse to the folder where you previously cloned <code>my-project</code>.</p>
+<p><img src="img/rstudio_file-new-project-existing-dir.png" width="300"/></p>
+<p>You’ll notice a couple new files created in the Files pane:</p>
+<ul>
+<li><code>.gitignore</code> stores all the files for git to ignore committing</li>
+<li><code>my-project.Rproj</code> stores the settings for this project</li>
+</ul>
+<p>Open the Github Desktop App, enter a message like “new RStudio project” and click on “Commit and Sync gh-pages”. This will update <a href="https://github.com/USER/my-project" class="uri">https://github.com/USER/my-project</a>.</p>
+<p><img src="img/github-app_new-rstudio-proj-commit.png" width="300"/></p>
+</div>
+<div id="create-index.rmd-in-rmarkdown" class="section level2">
+<h2><span class="header-section-number">3.2</span> Create <code>index.Rmd</code> in Rmarkdown</h2>
+<p>Back in RStudio, let’s create a new Rmarkdown file, which allows us to weave markdown text with chunks of R code to be evaluated and output content like tables and plots.</p>
+<p>File -&gt; New File -&gt; Rmarkdown… -&gt; Document of output format HTML, OK.</p>
+<p><img src="img/rstudio_new-rmd-doc-html.png" width="300"/></p>
+<p>You can give it a Title of “My Project”. After you click OK, most importantly File -&gt; Save as <code>index</code> (which will get named with the filename extension <code>index.Rmd</code>).</p>
+<p>Some initial text is already provided for you. Let’s go ahead and “Knit HTML”.</p>
+<p>Notice how the markdown is rendered similar to as before + <strong>R code chunks</strong> are surrounded by 3 backticks and <code>{r LABEL}</code>. These are evaluated and return the output text in the case of <code>summary(cars)</code> and the output plot in the case of <code>plot(pressure)</code>.</p>
+<p>Notice how the code <code>plot(pressure)</code> is not shown in the HTML output because of the R code chunk option <code>echo=FALSE</code>.</p>
+<p>Before we continue exploring Rmarkdown, return to the Github Desktop App, enter a message like “added index” and click on “Commit and Sync gh-pages”. This will update <a href="https://github.com/USER/my-project" class="uri">https://github.com/USER/my-project</a>, and now you can also see your project website with a default <code>index.html</code> viewable at <a href="http://USER.github.io/my-project" class="uri">http://USER.github.io/my-project</a></p>
+<p>For more on Rmarkdown:</p>
+<ul>
+<li><a href="../cheatsheets/rmarkdown-cheatsheet.pdf">rmarkdown-cheatsheet.pdf</a></li>
+<li><a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a></li>
+</ul>
 </div>
 <div id="merge-conflicts" class="section level2">
-<h2><span class="header-section-number">2.5</span> Merge Conflicts</h2>
+<h2><span class="header-section-number">3.3</span> Merge Conflicts</h2>
 <p><a href="http://r-pkgs.had.co.nz/git.html#git-pull">merge conflicts</a></p>
 </div>
 </div>

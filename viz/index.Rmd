@@ -91,6 +91,7 @@ s
 Now with country emissions datasets...
 
 - [CO2 Emissions from Fossil Fuels since 1751, By Nation - Dataset - Frictionless Open Data](http://data.okfn.org/data/kiliakis/co2-fossil-by-nation)
+- [datasets/gdp](https://github.com/datasets/gdp/blob/master/data/gdp.csv)
 
 ```{r}
 
