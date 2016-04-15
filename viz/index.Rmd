@@ -169,17 +169,25 @@ suppressPackageStartupMessages({
 })
 op <- options(gvis.plot.tag='chart')
 
-m = gvisMotionChart(
-  # gapminder %>%
+g10 = gapminder %>%
+  filter(year %in% seq(1957,2007,by=10))
+
+# gapminder %>%
   #   filter(year %in% seq(1957,2007,by=10)), 
-  gapminder %>%
-    filter(year %in% c(1957,2007)), 
+  # gapminder %>%
+  #   filter(year %in% c(1957,2007)), 
+  # gapminder %>%
+  #   filter(year == 2007)
+
+m = gvisMotionChart(
+  g10, 
   idvar='country', 
   timevar='year', 
   xvar='gdpPercap', 
   yvar='lifeExp', 
   colorvar='continent',
-  sizevar='pop_m')
+  sizevar='pop_m',
+  options=list(width=400, height=350))
          #options=list(width=400, height=350))
 plot(m)
 ```
