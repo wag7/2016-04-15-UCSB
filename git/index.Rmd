@@ -207,6 +207,7 @@ For more on Rmarkdown:
 
 - [rmarkdown-cheatsheet.pdf](../cheatsheets/rmarkdown-cheatsheet.pdf)
 - <http://rmarkdown.rstudio.com>
+- [knitr in a knutshell - Karl Broman](http://kbroman.org/knitr_knutshell/)
 
 ## Merge Conflicts
 
