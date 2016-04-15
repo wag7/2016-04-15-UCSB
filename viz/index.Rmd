@@ -170,13 +170,16 @@ suppressPackageStartupMessages({
 op <- options(gvis.plot.tag='chart')
 
 m = gvisMotionChart(
-  gapminder, 
+  gapminder %>%
+    mutate(
+      pop_m = pop / 1e6,
+      log_gdpPercap = log(gdpPercap)), 
   idvar='country', 
   timevar='year', 
-  xvar='gdpPercap', 
+  xvar='log_gdpPercap', 
   yvar='lifeExp', 
   colorvar='continent',
-  sizevar='pop')
+  sizevar='pop_m')
 plot(m)
 ```
 
