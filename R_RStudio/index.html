@@ -329,7 +329,7 @@ seq(from = 1, to = 10) # same as seq(1, 10); R assumes by position</code></pre>
 <pre class="r"><code>??install </code></pre>
 <p>Not all functions have (or require) arguments:</p>
 <pre class="r"><code>date()</code></pre>
-<pre><code>## [1] &quot;Thu Apr 14 22:31:54 2016&quot;</code></pre>
+<pre><code>## [1] &quot;Thu Apr 14 22:36:25 2016&quot;</code></pre>
 <p>Now look at your workspace – in the upper right pane. The workspace is where user-defined objects accumulate. You can also get a listing of these objects with commands:</p>
 <pre class="r"><code>objects()</code></pre>
 <pre><code>## [1] &quot;jenny_rocks&quot;                &quot;this_is_a_really_long_name&quot;
@@ -457,44 +457,11 @@ gapminder &lt;- read.csv('data/gapminder-FiveYearData.csv')</code></pre>
 <pre class="r"><code>## explore the gapminder dataset
 gapminder # this is super long! Let's inspect in different ways</code></pre>
 <p>Let’s use <code>head</code> and <code>tail</code>:</p>
-<pre><code>##       country year      pop continent lifeExp gdpPercap
-## 1 Afghanistan 1952  8425333      Asia  28.801  779.4453
-## 2 Afghanistan 1957  9240934      Asia  30.332  820.8530
-## 3 Afghanistan 1962 10267083      Asia  31.997  853.1007
-## 4 Afghanistan 1967 11537966      Asia  34.020  836.1971
-## 5 Afghanistan 1972 13079460      Asia  36.088  739.9811
-## 6 Afghanistan 1977 14880372      Asia  38.438  786.1134
-##       country year      pop continent lifeExp gdpPercap
-## 1699 Zimbabwe 1982  7636524    Africa  60.363  788.8550
-## 1700 Zimbabwe 1987  9216418    Africa  62.351  706.1573
-## 1701 Zimbabwe 1992 10704340    Africa  60.377  693.4208
-## 1702 Zimbabwe 1997 11404948    Africa  46.809  792.4500
-## 1703 Zimbabwe 2002 11926563    Africa  39.989  672.0386
-## 1704 Zimbabwe 2007 12311143    Africa  43.487  469.7093
-##        country year      pop continent lifeExp gdpPercap
-## 1  Afghanistan 1952  8425333      Asia  28.801  779.4453
-## 2  Afghanistan 1957  9240934      Asia  30.332  820.8530
-## 3  Afghanistan 1962 10267083      Asia  31.997  853.1007
-## 4  Afghanistan 1967 11537966      Asia  34.020  836.1971
-## 5  Afghanistan 1972 13079460      Asia  36.088  739.9811
-## 6  Afghanistan 1977 14880372      Asia  38.438  786.1134
-## 7  Afghanistan 1982 12881816      Asia  39.854  978.0114
-## 8  Afghanistan 1987 13867957      Asia  40.822  852.3959
-## 9  Afghanistan 1992 16317921      Asia  41.674  649.3414
-## 10 Afghanistan 1997 22227415      Asia  41.763  635.3414
-##       country year      pop continent lifeExp gdpPercap
-## 1693 Zimbabwe 1952  3080907    Africa  48.451  406.8841
-## 1694 Zimbabwe 1957  3646340    Africa  50.469  518.7643
-## 1695 Zimbabwe 1962  4277736    Africa  52.358  527.2722
-## 1696 Zimbabwe 1967  4995432    Africa  53.995  569.7951
-## 1697 Zimbabwe 1972  5861135    Africa  55.635  799.3622
-## 1698 Zimbabwe 1977  6642107    Africa  57.674  685.5877
-## 1699 Zimbabwe 1982  7636524    Africa  60.363  788.8550
-## 1700 Zimbabwe 1987  9216418    Africa  62.351  706.1573
-## 1701 Zimbabwe 1992 10704340    Africa  60.377  693.4208
-## 1702 Zimbabwe 1997 11404948    Africa  46.809  792.4500
-## 1703 Zimbabwe 2002 11926563    Africa  39.989  672.0386
-## 1704 Zimbabwe 2007 12311143    Africa  43.487  469.7093</code></pre>
+<pre class="r"><code>head(gapminder) # shows first 6
+tail(gapminder) # shows last 6
+
+head(gapminder, 10) # shows first X that you indicate
+tail(gapminder, 12) # guess what this does!</code></pre>
 <p><code>str()</code> will provide a sensible description of almost anything: when in doubt, just <code>str()</code> some of the recently created objects to get some ideas about what to do next.</p>
 <pre class="r"><code>str(gapminder) # ?str - displays the structure of an object
 ## 'data.frame':    1704 obs. of  6 variables:
@@ -684,9 +651,10 @@ x &lt;- rpois(1, lambda=8)
 if (x &gt;= 10) {
   print(&quot;x is greater than or equal to 10&quot;)
 }
+## [1] &quot;x is greater than or equal to 10&quot;
 
 x
-## [1] 9</code></pre>
+## [1] 13</code></pre>
 <p>Note you may not get the same output as your neighbour because you may be sampling different random numbers from the same distribution.</p>
 <p>Let’s go a step further:</p>
 <pre class="r"><code>x &lt;- rpois(1, lambda=8)
@@ -698,7 +666,7 @@ if (x &gt;= 10) {
 } else {
   print(&quot;x is less than 5&quot;)
 }
-## [1] &quot;x is less than 5&quot;</code></pre>
+## [1] &quot;x is greater than 5&quot;</code></pre>
 <p><strong>Important:</strong> when R evaluates the condition inside <code>if</code> statements, it is looking for a logical element, i.e., <code>TRUE</code> or <code>FALSE</code>. This can cause some headaches. For example:</p>
 <pre class="r"><code>x  &lt;-  4 == 3
 if (x) {
