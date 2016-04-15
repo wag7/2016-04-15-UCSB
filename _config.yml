@@ -2,8 +2,8 @@
 # Values for this workshop - EDIT THIS SECTION.
 #--------------------------------------------------------------------------------
 baseurl: "/2016-04-15-UCSB"
-workshop_repo   : "http://github.com/swcarpentry/workshop-template"
-workshop_site   : "http://swcarpentry.github.io/workshop-template"
+workshop_repo   : "http://github.com/remi-daigle/2016-04-15-UCSB"
+workshop_site   : "http://remi-daigle.github.io/2016-04-15-UCSB"
 #--------------------------------------------------------------------------------
 # Standard Software Carpentry settings - should not need to be modified.
 #--------------------------------------------------------------------------------
