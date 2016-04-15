@@ -13,12 +13,9 @@ layout: page
     {% assign user = user_hash[1] %}
 
     <li class="js-student" data-username="{{username}}">
-      <a href="https://github.com/{{ username }}">
-        <!-- TODO add loading image -->
-        <img class="js-avatar" src=""/>
-      </a>
       <div class="info">
         <a href="https://github.com/{{ username }}">
+        <img class="js-avatar" src=""/>
           <div>
             <span class="github-username">@{{ username }}</span>
           </div>
