@@ -12,6 +12,7 @@
 - feedback on day 2. stickies w/ feedback. at end of each. diff't color for each.
   - google doc
   -
+- Show a preview of what we'll make by the end of Day 2!
 
 ## Intro to programming concepts with the Unix shell
 
@@ -19,35 +20,39 @@
 
 ## Intro to R and RStudio
 
-- script to read in data
+- [R_RStudio](/R_RStudio/index.html)
+- produces script with basic gapminder exploration
 
 ## Wrap-up I
 
 
 ## Reproducible workflow and Version control with Git, Github, and R Markdown
 
-- r chunk
-- git (bastard) + github
-- workflow
+- r chunk [BB]
+- git (bastard) + github [BB]
+- workflow [BB]
   - push, pull to student directory thru web
   - create github.io, create README.md
     - link to course site w/ header. ? & preview
     - create proj
-- clone w/ app
+- clone w/ app [RD]
   - see README.md
   - introduce Rmarkdown w/ index.Rmd
     - http://user.github.io
     - create index.Rmd with default New > Rmarkdown (cars)
-- internet?!: Stephanie Tulley
-- github app
-  - clone
-- merge conflict by editing.
-- Create R Project in existing git folder
+- merge conflict by editing. [RD, BB]
+- Create R Project in existing git folder 
   - ~/github/repo/\*.Rproj
 - cuttable org/user.github.io
 
 ## Data wrangling and visualization in R
 
+[is the plan stil that JL teaches dplyr and BB/RD teaches vis]
+
+- data wrangling: dplyr, tidyr [JL] 
+  - copy .R script from Day 1 into an Rmd
+
+-vis [BB, RD]
 - [Robinlovelace/Creating-maps-in-R: Introductory tutorial on graphical display of geographical information in R.](https://github.com/Robinlovelace/Creating-maps-in-R)
   - **ggmap**: extends the plotting package **ggplot2** for maps
   - **rgdal**: R's interface to the popular C/C++ spatial data processing library [gdal](http://www.gdal.org/)
