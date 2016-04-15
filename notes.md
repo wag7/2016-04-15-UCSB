@@ -1,3 +1,19 @@
+## TODO
+
+- git
+  - students directory for fork & pull
+  - Preview website
+- viz
+  - motion chart default log(pop) with Adv Settings
+
+## Jekyll
+
+```bash
+cd ~/github/2016-04-15-UCSB
+bundle exec jekyll serve --baseurl ''
+/usr/local/bin/jekyll serve --baseurl ''
+```
+
 ## Introductions
 
 - JL: beginner confidence
@@ -42,7 +58,7 @@
     - http://user.github.io
     - create index.Rmd with default New > Rmarkdown (cars)
 - merge conflict by editing. [RD, BB]
-- Create R Project in existing git folder 
+- Create R Project in existing git folder
   - ~/github/repo/\*.Rproj
 - cuttable org/user.github.io
 
@@ -50,7 +66,7 @@
 
 [is the plan stil that JL teaches dplyr and BB/RD teaches vis]
 
-- data wrangling: dplyr, tidyr [JL] 
+- data wrangling: dplyr, tidyr [JL]
   - copy .R script from Day 1 into an Rmd
 
 -vis [BB, RD]
