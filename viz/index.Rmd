@@ -198,18 +198,30 @@ Thematic maps
 ```{r}
 library(tmap) # install.packages('tmap')
 
-data(World, metro)
-metro$growth <- (metro$pop2020 - metro$pop2010) / (metro$pop2010 * 10) * 100
+# load world spatial polygons
+data(World)
 
-m <- tm_shape(World) +
-    tm_polygons("income_grp", palette="-Blues", contrast=.7, id="name", title="Income group") +
-    tm_shape(metro) +
-    tm_bubbles("pop2010", col = "growth", 
-               border.col = "black", border.alpha = .5, 
-               style="fixed", breaks=c(-Inf, seq(0, 6, by=2), Inf),
-               palette="-RdYlBu", contrast=1, 
-               title.size="Metro population", 
-               title.col="Growth rate (%)", id="name") + 
+# inspect values in World
+World@data %>% tbl_df()
+
+# gapminder countries not in World. skipping for now
+g %>% 
+  anti_join(World@data, by=c('country'='name')) %>% 
+  arrange(desc(pop))
+
+# World countries not in gapminder. skipping for now
+World@data %>% 
+  anti_join(g, by=c('name'='country')) %>% 
+  arrange(desc(pop_est)) %>%
+  select(iso_a3, name, pop_est)
+
+# join gapminder data to World
+World@data = World@data %>%
+  left_join(g, by=c('name'='country'))
+
+# make map
+m = tm_shape(World) +
+    tm_polygons('lifeExp', palette='RdYlGn', id='name', title='Life expectancy (years)', auto.palette.mapping=F) +
     tm_style_gray() + tm_format_World()
 m
 ```
@@ -217,6 +229,7 @@ m
 ## Interactive
 
 ```{r}
+# show interactive map
 tmap_leaflet(m)
 ```
 
