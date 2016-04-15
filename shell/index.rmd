@@ -1,0 +1,1458 @@
+---
+title: "Introduction to the Shell"
+author: "Remi Daigle"
+date: "April 15, 2016"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: show
+---
+
+This lesson is my customized version of the Software Carpentry lesson on [The Unix Shell](http://swcarpentry.github.io/shell-novice/). Please see the original lesson for a more detailed walkthrough
+
+# What is 'the shell'?
+For our purposes the shell is 'that box where you type in commands'. It is a **command-line interface** that looks like DOS (if you're old enough to remember DOS). It has many names and 'flavours'; Windows users have the Command Prompt, Mac and Unix/Linux users will have the terminal. In this workshop we will learn the BASH shell because it is the most popular shell language as well as being the default for Unix/Linux/Mac's (and can be easily installed on Windows machines).
+
+# Why would scientists want to us it?
+Computer scientists will sometimes give the argument that 'everyone' should learn to use the shell because that 'came first'. That argument does not fly with me! I am not a computer scientist and **if it does not help me with my own research, I do not care!**
+
+We are here learning about the shell, so it must be helpful and here's why:
+
+- Modern operating systems with graphical user interfaces are design for 'typical use'. Scientists are not typical users and in the process of discovery, by definition should be doing something no one has done before. If something has never been done, it's hard to believe an operating system has been designed to do it!
+- In this process of discovery, you **will** mess something up your computer. The command line is often the place to fix those issues
+- You can write it all down in a text editor and save it. Writing down the commands in a script means it is **reproducible**!
+ 
+![writing it down](http://i.imgur.com/EyRHA.jpg)
+
+- Last, but certainly not least, many high performance computing servers will only have the shell as their interface.
+
+# Navigating your files and directories
+> **Learning Objectives**
+>
+> *   Explain the similarities and differences between a file and a directory.
+> *   Translate an absolute path into a relative path and vice versa.
+> *   Construct absolute and relative paths that identify specific files and directories.
+> *   Explain the steps in the shell's read-run-print cycle.
+> *   Identify the actual command, flags, and filenames in a command-line call.
+> *   Demonstrate the use of tab completion, and explain its advantages.
+
+The part of the operating system responsible for managing files and directories
+is called the **file system**.
+It organizes our data into files,
+which hold information,
+and directories (also called "folders"),
+which hold files or other directories.
+
+## Working directory
+
+Several commands are frequently used to create, inspect, rename, and delete files and directories.
+To start exploring them, Let's open a shell window and find out where we are by running a command called `pwd`
+(which stands for "print working directory").
+At any moment,
+our **current working directory**
+is our current default directory,
+i.e.,
+the directory that the computer assumes we want to run commands in
+unless we explicitly specify something else.
+Here,
+the computer's response is `/Users/nelle`,
+which is Nelle's **home directory**:
+
+~~~ {.bash}
+$ pwd
+~~~
+~~~ {.output}
+/Users/nelle
+~~~
+
+> **Home Directory Variation**
+>
+> The home directory path will look different on different operating systems.
+> On Linux it may look like `/home/nelle`,
+> and on Windows it will be similar to `C:\Documents and Settings\nelle` or 
+> `C:\Users\nelle`.  
+> (Note that it may look slightly different for different versions of Windows.)
+> In future examples, we've used Mac output as the default - Linux and Windows 
+> output may differ slightly, but should be generally similar.  
+
+To understand what a "home directory" is,
+let's have a look at how the file system as a whole is organized.  For the 
+sake of example, we'll be 
+illustrating the filesystem on our scientist Nelle's computer.  After this
+illustration, you'll be learning commands to explore your own filesystem, 
+which will be constructed in a similar way, but not be exactly identical.  
+
+On Nelle's computer, the filesystem looks like this: 
+
+![The File System](https://raw.githubusercontent.com/swcarpentry/shell-novice/gh-pages/fig/filesystem.png)
+
+At the top is the **root directory**
+that holds everything else.
+We refer to it using a slash character `/` on its own;
+this is the leading slash in `/Users/nelle`.
+
+Inside that directory are several other directories:
+`bin` (which is where some built-in programs are stored),
+`data` (for miscellaneous data files),
+`Users` (where users' personal directories are located),
+`tmp` (for temporary files that don't need to be stored long-term),
+and so on.  
+
+We know that our current working directory `/Users/nelle` is stored inside `/Users`
+because `/Users` is the first part of its name.
+Similarly,
+we know that `/Users` is stored inside the root directory `/`
+because its name begins with `/`.
+
+> **Slashes**
+>
+> Notice that there are two meanings for the `/` character.
+> When it appears at the front of a file or directory name,
+> it refers to the root directory. When it appears *inside* a name,
+> it's just a separator.
+
+Underneath `/Users`,
+we find one directory for each user with an account on Nelle's machine, 
+her colleagues the Mummy and Wolfman.  
+
+![Home Directories](https://raw.githubusercontent.com/swcarpentry/shell-novice/gh-pages/fig/filesystem.png)
+
+The Mummy's files are stored in `/Users/imhotep`,
+Wolfman's in `/Users/larry`,
+and Nelle's in `/Users/nelle`.  Because Nelle is the user in our 
+examples here, this is why we get `/Users/nelle` as our home directory.  
+Typically, when you open a new command prompt you will be in 
+your home directory to start.  
+
+## Listing directory contents: ls
+Now let's learn the command that will let us see the contents of our 
+own filesystem.  We can see what's in our home directory by running `ls`,
+which stands for "listing":
+
+~~~ {.bash}
+$ ls
+~~~
+~~~ {.output}
+Applications Documents    Library      Music        Public
+Desktop      Downloads    Movies       Pictures
+~~~
+
+(Again, your results may be slightly different depending on your operating 
+system and how you have customized your filesystem.)
+
+`ls` prints the names of the files and directories in the current directory in 
+alphabetical order,
+arranged neatly into columns.
+We can make its output more comprehensible by using the **flag** `-F`,
+which tells `ls` to add a trailing `/` to the names of directories:
+
+~~~ {.bash}
+$ ls -F
+~~~
+~~~ {.output}
+Applications/ Documents/    Library/      Music/        Public/
+Desktop/      Downloads/    Movies/       Pictures/
+~~~
+
+Here,
+we can see that our home directory contains mostly **sub-directories**.
+Any names in your output that don't have trailing slashes,
+are plain old **files**.
+And note that there is a space between `ls` and `-F`:
+without it,
+the shell thinks we're trying to run a command called `ls-F`,
+which doesn't exist.
+
+We can also use `ls` to see the contents of a different directory.  Let's take a 
+look at our `Desktop` directory by running `ls -F Desktop`,
+i.e.,
+the command `ls` with the **arguments** `-F` and `Desktop`.
+The second argument --- the one *without* a leading dash --- tells `ls` that
+we want a listing of something other than our current working directory:
+
+~~~ {.bash}
+$ ls -F Desktop
+~~~
+~~~ {.output}
+data-shell/
+~~~
+
+Your output should be a list of all the files and sub-directories on your 
+Desktop, including the `data-shell` directory you downloaded at 
+the start of the lesson.  Take a look at your Desktop to confirm that 
+your output is accurate.  
+
+As you may now see, using a bash shell is strongly dependent on the idea that 
+your files are organized in an hierarchical file system.  
+Organizing things hierarchically in this way helps us keep track of our work:
+it's possible to put hundreds of files in our home directory,
+just as it's possible to pile hundreds of printed papers on our desk,
+but it's a self-defeating strategy.
+
+Now that we know the `data-shell` directory is located on our Desktop, we 
+can do two things.  
+
+First, we can look at its contents, using the same strategy as before, passing 
+a directory name to `ls`: 
+
+~~~ {.bash}
+$ ls -F Desktop/data-shell
+~~~
+~~~ {.output}
+creatures/          molecules/          notes.txt           solar.pdf
+data/               north-pacific-gyre/ pizza.cfg           writing/
+~~~
+
+## Changing directories: cd
+Second, we can actually change our location to a different directory, so 
+we are no longer located in
+our home directory.  
+
+The command to change locations is `cd` followed by a 
+directory name to change our working directory.
+`cd` stands for "change directory",
+which is a bit misleading:
+the command doesn't change the directory,
+it changes the shell's idea of what directory we are in.
+
+Let's say we want to move to the `data` directory we saw above.  We can 
+use the following series of commands to get there: 
+
+~~~ {.bash}
+$ cd Desktop
+$ cd data-shell
+$ cd data
+~~~
+
+These commands will move us from our home directory onto our Desktop, then into 
+the `data-shell` directory, then into the `data` directory.  `cd` doesn't print anything,
+but if we run `pwd` after it, we can see that we are now 
+in `/Users/nelle/Desktop/data-shell/data`.
+If we run `ls` without arguments now,
+it lists the contents of `/Users/nelle/Desktop/data-shell/data`,
+because that's where we now are:
+
+~~~ {.bash}
+$ pwd
+~~~
+~~~ {.output}
+/Users/nelle/Desktop/data-shell/data
+~~~
+~~~ {.bash}
+$ ls -F
+~~~
+~~~ {.output}
+amino-acids.txt   elements/     pdb/	        salmon.txt
+animals.txt       morse.txt     planets.txt     sunspot.txt
+~~~
+
+We now know how to go down the directory tree:
+how do we go up?  We might try the following: 
+
+~~~{.bash}
+cd data-shell
+~~~
+~~~{.error}
+-bash: cd: data-shell: No such file or directory
+~~~
+
+But we get an error!  Why is this?  
+
+With our methods so far, 
+`cd` can only see sub-directories inside your current directory.  There are 
+different ways to see directories above your current location; we'll start 
+with the simplest.  
+
+There is a shortcut in the shell to move up one directory level
+that looks like this: 
+
+~~~ {.bash}
+$ cd ..
+~~~
+
+`..` is a special directory name meaning
+"the directory containing this one",
+or more succinctly,
+the **parent** of the current directory.
+Sure enough,
+if we run `pwd` after running `cd ..`, we're back in `/Users/nelle/Desktop/data-shell`:
+
+~~~ {.bash}
+$ pwd
+~~~
+~~~ {.output}
+/Users/nelle/Desktop/data-shell
+~~~
+
+The special directory `..` doesn't usually show up when we run `ls`.  If we want 
+to display it, we can give `ls` the `-a` flag:
+
+~~~ {.bash}
+$ ls -F -a
+~~~
+~~~ {.output}
+./                  creatures/          notes.txt
+../                 data/               pizza.cfg
+.bash_profile       molecules/          solar.pdf
+Desktop/            north-pacific-gyre/ writing/
+~~~
+
+`-a` stands for "show all";
+it forces `ls` to show us file and directory names that begin with `.`,
+such as `..` (which, if we're in `/Users/nelle`, refers to the `/Users` directory)
+As you can see,
+it also displays another special directory that's just called `.`,
+which means "the current working directory".
+It may seem redundant to have a name for it,
+but we'll see some uses for it soon.
+
+> **Other Hidden Files**
+> 
+> In addition to the hidden directories `..` and `.`, you may also see a file
+> called `.bash_profile`. This file usually contains shell configuration
+> settings. You may also see other files and directories beginning
+> with `.`. These are usually files and directories that are used to configure
+> different programs on your computer. The prefix `.` is used to prevent these
+> configuration files from cluttering the terminal when a standard `ls` command
+> is used.
+
+> **Orthogonality**
+>
+> The special names `.` and `..` don't belong to `ls`;
+> they are interpreted the same way by every program.
+> For example,
+> if we are in `/Users/nelle/data`,
+> the command `ls ..` will give us a listing of `/Users/nelle`.
+> When the meanings of the parts are the same no matter how they're combined,
+> programmers say they are **orthogonal**:
+> Orthogonal systems tend to be easier for people to learn
+> because there are fewer special cases and exceptions to keep track of.
+
+These then, are the basic commands for navigating the filesystem on your computer: 
+`pwd`, `ls` and `cd`.  Let's explore some variations on those commands.  What happens 
+if you type `cd` on its own, without giving 
+a directory?  
+
+~~~ {.bash}
+$ cd
+~~~
+
+How can you check what happened?  `pwd` gives us the answer!  
+
+~~~ {.bash}
+$ pwd
+~~~
+~~~ {.output}
+/Users/nelle
+~~~
+
+It turns out that `cd` without an argument will return you to your home directory, 
+which is great if you've gotten lost in your own filesystem.  
+
+Let's try returning to the `data` directory from before.  Last time, we used 
+three commands, but we can actually string together the list of directories 
+to move to `data` in one step: 
+
+~~~ {.bash}
+$ cd Desktop/data-shell/data
+~~~
+
+Check that we've moved to the right place by running `pwd` and `ls -F`.  
+
+If we want to move up one level from the shell directory, we could use `cd ..`.  But 
+there is another way to move to any directory, regardless of your 
+current location.  
+
+So far, when specifying directory names, or even a directory path (as above), 
+we have been using **relative paths**.  When you use a relative path with a command 
+like `ls` or `cd`, it tries to find that location  from where we are,
+rather than from the root of the file system.  
+
+However, it is possible to specify the **absolute path** to a directory by 
+including its entire path from the root directory, which is indicated by a 
+leading slash.  The leading `/` tells the computer to follow the path from 
+the root of the file system, so it always refers to exactly one directory,
+no matter where we are when we run the command.
+
+This allows us to move to our `data-shell` directory from anywhere on
+the filesystem (including from inside `data`).  To find the absolute path 
+we're looking for, we can use `pwd` and then extract the piece we need 
+to move to `data-shell`.  
+
+~~~ {.bash}
+$ pwd
+~~~
+~~~ {.output}
+/Users/nelle/Desktop/data-shell/data
+~~~
+~~~ {.bash}
+$ cd /Users/nelle/Desktop/data-shell
+~~~
+
+Run `pwd` and `ls -F` to ensure that we're in the directory we expect.  
+
+> **Two More Shortcuts**
+>
+> The shell interprets the character `~` (tilde) at the start of a path to
+> mean "the current user's home directory". For example, if Nelle's home
+> directory is `/Users/nelle`, then `~/data` is equivalent to
+> `/Users/nelle/data`. This only works if it is the first character in the
+> path: `here/there/~/elsewhere` is *not* `here/there/Users/nelle/elsewhere`. 
+> 
+> Another shortcut is the `-` (dash) character.  `cd` will translate `-` into
+> *the previous directory I was in*, which is faster than having to remember, 
+> then type, the full path.  This is a *very* efficient way of moving back 
+> and forth between directories. The difference between `cd ..` and `cd -` is 
+> that the former brings you *up*, while the latter brings you *back*. 
+
+
+> **tab completion**
+> If you are in the `nelle/` directory and wanted to see the list of 
+> files from `north-pacific-gyre/2012-07-03/` you could type it all out:
+>
+>~~~ {.bash}
+>$ ls north-pacific-gyre/2012-07-03/
+>~~~
+>
+>This is a lot to type,
+>but she can let the shell do most of the work through what is called **tab completion**.
+>If you type:
+>
+>~~~ {.bash}
+>$ ls nor
+>~~~
+>
+>and then press tab (the tab key on her keyboard),
+>the shell automatically completes the directory name for you!
+
+
+
+> **Many ways to do the same thing - absolute vs relative paths**
+>
+> For a hypothetical filesystem location of `/Users/amanda/data/`, 
+> select each of the below commands that Amanda could use to navigate to her home directory, 
+> which is `/Users/amanda`.
+> 
+>1.  `cd .`
+>2.  `cd /`
+>3.  `cd /home/amanda`
+>4.  `cd ../..`
+>5.  `cd ~`
+>6.  `cd home`
+>7.  `cd ~/data/..`
+>8.  `cd`
+>9.  `cd ..`
+
+> **Challenge: Relative path resolution**
+>
+> Using the filesystem diagram below, if `pwd` displays `/Users/thing`, 
+what will `ls ../backup` display?
+>
+> 1.  `../backup: No such file or directory`
+> 2.  `2012-12-01 2013-01-08 2013-01-27`
+> 3.  `2012-12-01/ 2013-01-08/ 2013-01-27/`
+> 4.  `original pnas_final pnas_sub`
+> 
+> ![File System for Challenge Questions](https://raw.githubusercontent.com/swcarpentry/shell-novice/gh-pages/fig/filesystem-challenge.png)
+
+
+> **Challenge: `ls` reading comprehension**
+>
+> Assuming a directory structure as in the above Figure 
+> (File System for Challenge Questions), if `pwd` displays `/Users/backup`,
+> and `-r` tells `ls` to display things in reverse order,
+> what command will display:
+>
+> ~~~
+> pnas_sub/ pnas_final/ original/
+> ~~~
+>
+> 1.  `ls pwd`
+> 2.  `ls -r -F`
+> 3.  `ls -r -F /Users/backup`
+> 4.  Either \#2 or \#3 above, but not \#1.
+
+
+> **Challenge: Exploring more `ls` arguments**
+>
+> What does the command `ls` do when used with the `-s` and `-h`
+> arguments?
+# File management
+
+# Manipulating files and directories
+> **Learning Objectives **
+>
+> *   Create a directory hierarchy that matches a given diagram.
+> *   Create files in that hierarchy using an editor or by copying and renaming existing files.
+> *   Display the contents of a directory using the command line.
+> *   Delete specified files and/or directories.
+
+## Creating directories: mkdir
+Let's create a new directory called `thesis` using the command `mkdir thesis`
+(which has no output):
+
+~~~ {.bash}
+$ mkdir thesis
+~~~
+
+As you might (or might not) guess from its name,
+`mkdir` means "make directory".
+Since `thesis` is a relative path
+(i.e., doesn't have a leading slash),
+the new directory is created in the current working directory:
+
+~~~ {.bash}
+$ ls -F
+~~~
+~~~ {.output}
+creatures/  north-pacific-gyre/  thesis/
+data/       notes.txt            writing/
+Desktop/    pizza.cfg
+molecules/  solar.pdf
+~~~
+
+However, there's nothing in it yet:
+
+~~~ {.bash}
+$ ls -F thesis
+~~~
+
+Let's change our working directory to `thesis` using `cd`,
+then run a text editor called Nano to create a file called `draft.txt`:
+
+~~~ {.bash}
+$ cd thesis
+$ nano draft.txt
+~~~
+
+Let's type in a few lines of text.
+Once we're happy with out text, we can press Ctrl-O (press the Ctrl key and, while
+holding it down, press the O key) to write our data to disk.
+
+![Nano in action](https://raw.githubusercontent.com/swcarpentry/shell-novice/gh-pages/fig/nano-screenshot.png)
+
+Once our file is saved, we can use Ctrl-X to quit the editor and 
+return to the shell.
+
+`nano` doesn't leave any output on the screen after it exits,
+but `ls` now shows that we have created a file called `draft.txt`:
+
+~~~ {.bash}
+$ ls
+~~~
+~~~ {.output}
+draft.txt
+~~~
+
+## Deleting files: rm and rmdir
+Let's tidy up by running `rm draft.txt`:
+
+~~~ {.bash}
+$ rm draft.txt
+~~~
+
+This command removes files (`rm` is short for "remove").
+If we run `ls` again,
+its output is empty once more,
+which tells us that our file is gone:
+
+~~~ {.bash}
+$ ls
+~~~
+
+> **WARNING:Deleting Is Forever**
+>
+> The Unix shell doesn't have a trash bin that we can recover deleted
+> files from (though most graphical interfaces to Unix do).  Instead,
+> when we delete files, they are unhooked from the file system so that
+> their storage space on disk can be recycled. Tools for finding and
+> recovering deleted files do exist, but there's no guarantee they'll
+> work in any particular situation, since the computer may recycle the
+> file's disk space right away.
+>
+> **DO NOT EVER USE THIS COMMAND**
+>
+>~~~ {.bash}
+>$ rm -rf /
+>~~~
+>I was nervous just typing it in this document! It is important to take the time to understand why **this will delete you entire harddrive**. The `rm` command will delete everything in `/`, which is your root directory so it contains **everything**, the `-rf` flags are 2 seperate toggles: `-r` which forces recursive deletion through all subdirectories and `-f` which forces deletion of read-only files without confirmation. 
+
+Let's re-create that file
+and then move up one directory to `/Users/nelle` using `cd ..`:
+
+~~~ {.bash}
+$ pwd
+~~~
+~~~ {.output}
+/Users/nelle/thesis
+~~~
+~~~ {.bash}
+$ nano draft.txt
+$ ls
+~~~
+~~~ {.output}
+draft.txt
+~~~
+~~~ {.bash}
+$ cd ..
+~~~
+
+If we try to remove the entire `thesis` directory using `rm thesis`,
+we get an error message:
+
+~~~ {.bash}
+$ rm thesis
+~~~
+~~~ {.error}
+rm: cannot remove `thesis': Is a directory
+~~~
+
+This happens because `rm` only works on files, not directories.
+The right command is `rmdir`,
+which is short for "remove directory".
+It doesn't work yet either, though,
+because the directory we're trying to remove isn't empty:
+
+~~~ {.bash}
+$ rmdir thesis
+~~~
+~~~ {.error}
+rmdir: failed to remove `thesis': Directory not empty
+~~~
+
+This little safety feature can save you a lot of grief,
+particularly if you are a bad typist.
+To really get rid of `thesis` we must first delete the file `draft.txt`:
+
+~~~ {.bash}
+$ rm thesis/draft.txt
+~~~
+
+The directory is now empty, so `rmdir` can delete it:
+
+~~~ {.bash}
+$ rmdir thesis
+~~~
+
+> **With Great Power Comes Great Responsibility**
+>
+> Removing the files in a directory just so that we can remove the
+> directory quickly becomes tedious. Instead, we can use `rm` with the
+> `-r` flag (which stands for "recursive"):
+>
+> ~~~
+> $ rm -r thesis
+> ~~~
+>
+> This removes everything in the directory, then the directory itself. If
+> the directory contains sub-directories, `rm -r` does the same thing to
+> them, and so on. It's very handy, but can do a lot of damage if used
+> without care.
+
+## Moving and renaming files: mv
+Let's create that directory and file one more time.
+(Note that this time we're running `nano` with the path `thesis/draft.txt`,
+rather than going into the `thesis` directory and running `nano` on `draft.txt` there.)
+
+~~~ {.bash}
+$ pwd
+~~~
+~~~ {.output}
+/Users/nelle
+~~~
+~~~ {.bash}
+$ mkdir thesis
+~~~
+~~~ {.bash}
+$ nano thesis/draft.txt
+$ ls thesis
+~~~
+~~~ {.output}
+draft.txt
+~~~
+
+`draft.txt` isn't a particularly informative name,
+so let's change the file's name using `mv`,
+which is short for "move":
+
+~~~ {.bash}
+$ mv thesis/draft.txt thesis/quotes.txt
+~~~
+
+The first parameter tells `mv` what we're "moving",
+while the second is where it's to go.
+In this case,
+we're moving `thesis/draft.txt` to `thesis/quotes.txt`,
+which has the same effect as renaming the file.
+Sure enough,
+`ls` shows us that `thesis` now contains one file called `quotes.txt`:
+
+~~~ {.bash}
+$ ls thesis
+~~~
+~~~ {.output}
+quotes.txt
+~~~
+
+One has to be careful when specifying the target file name, since `mv` will 
+silently overwrite any existing file with the same name, which could 
+lead to data loss. An additional flag, `mv -i` (or `mv --interactive`),
+can be used to make `mv` ask you for confirmation before overwriting. 
+
+Just for the sake of inconsistency,
+`mv` also works on directories --- there is no separate `mvdir` command.
+
+Let's move `quotes.txt` into the current working directory.
+We use `mv` once again,
+but this time we'll just use the name of a directory as the second parameter
+to tell `mv` that we want to keep the filename,
+but put the file somewhere new.
+(This is why the command is called "move".)
+In this case,
+the directory name we use is the special directory name `.` that we mentioned earlier.
+
+~~~ {.bash}
+$ mv thesis/quotes.txt .
+~~~
+
+The effect is to move the file from the directory it was in to the current working directory.
+`ls` now shows us that `thesis` is empty:
+
+~~~ {.bash}
+$ ls thesis
+~~~
+
+Further,
+`ls` with a filename or directory name as a parameter only lists that file or directory.
+We can use this to see that `quotes.txt` is still in our current directory:
+
+~~~ {.bash}
+$ ls quotes.txt
+~~~
+~~~ {.output}
+quotes.txt
+~~~
+
+## Copying files: cp
+The `cp` command works very much like `mv`,
+except it copies a file instead of moving it.
+We can check that it did the right thing using `ls`
+with two paths as parameters --- like most Unix commands,
+`ls` can be given thousands of paths at once:
+
+~~~ {.bash}
+$ cp quotes.txt thesis/quotations.txt
+$ ls quotes.txt thesis/quotations.txt
+~~~
+~~~ {.output}
+quotes.txt   thesis/quotations.txt
+~~~
+
+To prove that we made a copy,
+let's delete the `quotes.txt` file in the current directory
+and then run that same `ls` again.
+
+~~~ {.bash}
+$ rm quotes.txt
+$ ls quotes.txt thesis/quotations.txt
+~~~
+~~~ {.error}
+ls: cannot access quotes.txt: No such file or directory
+thesis/quotations.txt
+~~~
+This time it tells us that it can't find `quotes.txt` in the current directory,
+but it does find the copy in `thesis` that we didn't delete.
+
+> **What's In A Name?**
+>
+> You may have noticed that all of Nelle's files' names are "something dot
+> something", and in this part of the lesson, we always used the extension 
+> `.txt`.  This is just a convention: we can call a file `mythesis` or
+> almost anything else we want. However, most people use two-part names
+> most of the time to help them (and their programs) tell different kinds
+> of files apart. The second part of such a name is called the
+> **filename extension**, and indicates
+> what type of data the file holds: `.txt` signals a plain text file, `.pdf`
+> indicates a PDF document, `.cfg` is a configuration file full of parameters
+> for some program or other, `.png` is a PNG image, and so on.
+>
+> This is just a convention, albeit an important one. Files contain
+> bytes: it's up to us and our programs to interpret those bytes
+> according to the rules for plain text files, PDF documents, configuration
+> files, images, and so on.
+>
+> Naming a PNG image of a whale as `whale.mp3` doesn't somehow
+> magically turn it into a recording of whalesong, though it *might*
+> cause the operating system to try to open it with a music player
+> when someone double-clicks it.
+
+> **Renaming files**
+>
+> Suppose that you created a `.txt` file in your current directory to contain a list of the
+> statistical tests you will need to do to analyze your data, and named it: `statstics.txt`
+>
+> After creating and saving this file you realize you misspelled the filename! You want to
+> correct the mistake, which of the following commands could you use to do so?
+>
+> 1. `cp statstics.txt statistics.txt`
+> 2. `mv statstics.txt statistics.txt`
+> 3. `mv statstics.txt .`
+> 4. `cp statstics.txt .`
+
+> **Moving and Copying**
+>
+> What is the output of the closing `ls` command in the sequence shown below?
+>
+> ~~~
+> $ pwd
+> /Users/jamie/data
+> $ ls
+> proteins.dat
+> $ mkdir recombine
+> $ mv proteins.dat recombine
+> $ cp recombine/proteins.dat ../proteins-saved.dat
+> $ ls
+> ~~~
+>
+> 1.   `proteins-saved.dat recombine`
+> 2.   `recombine`
+> 3.   `proteins.dat recombine`
+> 4.   `proteins-saved.dat`
+
+> **Organizing Directories and Files**
+>
+> Jamie is working on a project and she sees that her files aren't very well
+> organized:
+>
+> ~~~
+> $ ls -F
+> analyzed/  fructose.dat    raw/   sucrose.dat
+> ~~~
+>
+> The `fructose.dat` and `sucrose.dat` files contain output from her data
+> analysis. What command(s) covered in this lesson does she need to run so that the commands below will
+> produce the output shown?
+>
+> ~~~
+> $ ls -F
+> analyzed/   raw/
+> $ ls analyzed
+> fructose.dat    sucrose.dat
+> ~~~
+
+> **Copy with Multiple Filenames**
+>
+> What does `cp` do when given several filenames and a directory name, as in:
+>
+> ~~~
+> $ mkdir backup
+> $ cp thesis/citations.txt thesis/quotations.txt backup
+> ~~~
+>
+> What does `cp` do when given three or more filenames, as in:
+>
+> ~~~
+> $ ls -F
+> intro.txt    methods.txt    survey.txt
+> $ cp intro.txt methods.txt survey.txt
+> ~~~
+
+> **Listing Recursively and By Time**
+>
+> The command `ls -R` lists the contents of directories recursively,
+> i.e., lists their sub-directories, sub-sub-directories, and so on
+> in alphabetical order at each level.
+> The command `ls -t` lists things by time of last change,
+> with most recently changed files or directories first.
+> In what order does `ls -R -t` display things?
+
+# Loops and pipes
+
+> ## Learning Objectives {.objectives}
+>
+> *   Redirect a command's output to a file.
+> *   Process a file instead of keyboard input using redirection.
+> *   Construct command pipelines with two or more stages.
+> *   Explain what usually happens if a program or pipeline isn't given any input to process.
+> *   Explain Unix's "small pieces, loosely joined" philosophy.
+
+Now that we know a few basic commands,
+we can finally look at the shell's most powerful feature:
+the ease with which it lets us combine existing programs in new ways.
+We'll start with a directory called `molecules`
+that contains six files describing some simple organic molecules.
+The `.pdb` extension indicates that these files are in Protein Data Bank format,
+a simple text format that specifies the type and position of each atom in the molecule.
+
+~~~ {.bash}
+$ ls molecules
+~~~
+~~~ {.output}
+cubane.pdb    ethane.pdb    methane.pdb
+octane.pdb    pentane.pdb   propane.pdb
+~~~
+
+Let's go into that directory with `cd` and run the command `wc *.pdb`.
+`wc` is the "word count" command:
+it counts the number of lines, words, and characters in files.
+The `*` in `*.pdb` matches zero or more characters,
+so the shell turns `*.pdb` into a list of all `.pdb` files in the current directory:
+
+~~~ {.bash}
+$ cd molecules
+$ wc *.pdb
+~~~
+~~~ {.output}
+  20  156 1158 cubane.pdb
+  12   84  622 ethane.pdb
+   9   57  422 methane.pdb
+  30  246 1828 octane.pdb
+  21  165 1226 pentane.pdb
+  15  111  825 propane.pdb
+ 107  819 6081 total
+~~~
+
+> **Wildcards**
+>
+> `*` is a **wildcard**. It matches zero or more
+> characters, so `*.pdb` matches `ethane.pdb`, `propane.pdb`, and every
+> file that ends with '.pdb'. On the other hand, `p*.pdb` only matches
+> `pentane.pdb` and `propane.pdb`, because the 'p' at the front only
+> matches filenames that begin with the letter 'p'.
+>
+> `?` is also a wildcard, but it only matches a single character. This
+> means that `p?.pdb` matches `pi.pdb` or `p5.pdb`, but not `propane.pdb`.
+> We can use any number of wildcards at a time: for example, `p*.p?*`
+> matches anything that starts with a 'p' and ends with '.', 'p', and at
+> least one more character (since the `?` has to match one character, and
+> the final `*` can match any number of characters). Thus, `p*.p?*` would
+> match `preferred.practice`, and even `p.pi` (since the first `*` can
+> match no characters at all), but not `quality.practice` (doesn't start
+> with 'p') or `preferred.p` (there isn't at least one character after the
+> '.p').
+>
+> When the shell sees a wildcard, it expands the wildcard to create a
+> list of matching filenames *before* running the command that was
+> asked for. As an exception, if a wildcard expression does not match
+> any file, Bash will pass the expression as a parameter to the command
+> as it is. For example typing `ls *.pdf` in the `molecules` directory
+> (which contains only files with names ending with `.pdb`) results in
+> an error message that there is no file called `*.pdf`.
+> However, generally commands like `wc` and `ls` see the lists of
+> file names matching these expressions, but not the wildcards
+> themselves. It is the shell, not the other programs, that deals with
+> expanding wildcards, and this is another example of orthogonal design.
+
+> **Challenge: Using wildcards**
+>
+> When run in the `molecules` directory, which `ls` command will
+> produce this output?
+>
+> `ethane.pdb   methane.pdb`
+>
+> 1. `ls *t*ane.pdb`
+> 2. `ls *t?ne.*`
+> 3. `ls *t??ne.pdb`
+> 4. `ls ethane.*`
+
+If we run `wc -l` instead of just `wc`,
+the output shows only the number of lines per file:
+
+~~~ {.bash}
+$ wc -l *.pdb
+~~~
+~~~ {.output}
+  20  cubane.pdb
+  12  ethane.pdb
+   9  methane.pdb
+  30  octane.pdb
+  21  pentane.pdb
+  15  propane.pdb
+ 107  total
+~~~
+
+We can also use `-w` to get only the number of words,
+or `-c` to get only the number of characters.
+
+## Redirecting: >
+
+Which of these files is shortest?
+It's an easy question to answer when there are only six files,
+but what if there were 6000?
+Our first step toward a solution is to run the command:
+
+
+
+~~~ {.bash}
+$ wc -l *.pdb > lengths.txt
+~~~
+
+The greater than symbol, `>`, tells the shell to **redirect** the command's output
+to a file instead of printing it to the screen. (This is why there is no screen output:
+everything that `wc` would have printed has gone into the
+file `lengths.txt` instead.)  The shell will create
+the file if it doesn't exist. If the file exists, it will be
+silently overwritten, which may lead to data loss and thus requires
+some caution.
+
+We can now send the content of `lengths.txt` to the screen using `cat lengths.txt`.
+`cat` stands for "concatenate":
+it prints the contents of files one after another.
+There's only one file in this case,
+so `cat` just shows us what it contains:
+
+~~~ {.bash}
+$ cat lengths.txt
+~~~
+~~~ {.output}
+  20  cubane.pdb
+  12  ethane.pdb
+   9  methane.pdb
+  30  octane.pdb
+  21  pentane.pdb
+  15  propane.pdb
+ 107  total
+~~~
+
+Now let's use the `sort` command to sort its contents.
+We will also use the `-n` flag to specify that the sort is
+numerical instead of alphabetical.
+This does *not* change the file;
+instead, it sends the sorted result to the screen:
+
+~~~ {.bash}
+$ sort -n lengths.txt
+~~~
+~~~ {.output}
+  9  methane.pdb
+ 12  ethane.pdb
+ 15  propane.pdb
+ 20  cubane.pdb
+ 21  pentane.pdb
+ 30  octane.pdb
+107  total
+~~~
+
+We can put the sorted list of lines in another temporary file called `sorted-lengths.txt`
+by putting `> sorted-lengths.txt` after the command,
+just as we used `> lengths.txt` to put the output of `wc` into `lengths.txt`.
+Once we've done that,
+we can run another command called `head` to get the first few lines in `sorted-lengths.txt`:
+
+~~~ {.bash}
+$ sort -n lengths.txt > sorted-lengths.txt
+$ head -n 1 sorted-lengths.txt
+~~~
+~~~ {.output}
+  9  methane.pdb
+~~~
+
+Using the parameter `-n 1` with `head` tells it that
+we only want the first line of the file;
+`-n 20` would get the first 20,
+and so on.
+Since `sorted-lengths.txt` contains the lengths of our files ordered from least to greatest,
+the output of `head` must be the file with the fewest lines.
+
+If you think this is confusing,
+you're in good company:
+even once you understand what `wc`, `sort`, and `head` do,
+all those intermediate files make it hard to follow what's going on.
+
+## Piping: |
+We can make it easier to understand by running `sort` and `head` together:
+
+~~~ {.bash}
+$ sort -n lengths.txt | head -n 1
+~~~
+~~~ {.output}
+  9  methane.pdb
+~~~
+
+The vertical bar, `|`, between the two commands is called a **pipe**.
+It tells the shell that we want to use
+the output of the command on the left
+as the input to the command on the right.
+The computer might create a temporary file if it needs to,
+or copy data from one program to the other in memory,
+or something else entirely;
+we don't have to know or care.
+
+Nothing prevents us from chaining pipes consecutively. That is, we can for example send the output of `wc` directly to `sort`, and then the resulting output to `head`. Thus we first use a pipe to send the output of `wc` to `sort`:
+
+~~~ {.bash}
+$ wc -l *.pdb | sort -n
+~~~
+~~~ {.output}
+   9 methane.pdb
+  12 ethane.pdb
+  15 propane.pdb
+  20 cubane.pdb
+  21 pentane.pdb
+  30 octane.pdb
+ 107 total
+~~~
+
+And now we send the output ot this pipe, through another pipe, to `head`, so that the full pipeline becomes:
+
+~~~ {.bash}
+$ wc -l *.pdb | sort -n | head -n 1
+~~~
+~~~ {.output}
+   9  methane.pdb
+~~~
+
+
+![Redirects and Pipes](https://raw.githubusercontent.com/swcarpentry/shell-novice/gh-pages/fig/redirects-and-pipes.png)
+
+
+> **Challenge: Piping commands together**
+>
+> In our current directory, we want to find the 3 files which have the least number of
+> lines. Which command listed below would work?
+>
+> 1. `wc -l * > sort -n > head -n 3`
+> 2. `wc -l * | sort -n | head -n 1-3`
+> 3. `wc -l * | head -n 3 | sort -n`
+> 4. `wc -l * | sort -n | head -n 3`
+
+
+> **Challenge: Pipe reading comprehension**
+>
+> A file called `animals.txt` contains the following data:
+>
+> ~~~
+> 2012-11-05,deer
+> 2012-11-05,rabbit
+> 2012-11-05,raccoon
+> 2012-11-06,rabbit
+> 2012-11-06,deer
+> 2012-11-06,fox
+> 2012-11-07,rabbit
+> 2012-11-07,bear
+> ~~~
+>
+> What text passes through each of the pipes and the final redirect in the pipeline below?
+>
+> ~~~
+> cat animals.txt | head -n 5 | tail -n 3 | sort -r > final.txt
+> ~~~
+
+## Loops: for
+
+
+**Loops** are key to productivity improvements through automation as they allow us to execute 
+commands repetitively. Similar to wildcards and tab completion, using loops also reduces the 
+amount of typing (and typing mistakes).
+Suppose we have several hundred genome data files named `basilisk.dat`, `unicorn.dat`, and so on.
+In this example,
+we'll use the `creatures` directory which only has two example files,
+but the principles can be applied to many many more files at once.
+We would like to modify these files, but also save a version of the original files, naming the copies
+`original-basilisk.dat` and `original-unicorn.dat`.
+We can't use:
+
+~~~ {.bash}
+$ cp *.dat original-*.dat
+~~~
+
+because that would expand to:
+
+~~~ {.bash}
+$ cp basilisk.dat unicorn.dat original-*.dat
+~~~
+
+This wouldn't back up our files, instead we get an error:
+
+~~~ {.error}
+cp: target `original-*.dat' is not a directory
+~~~
+
+This problem arises when `cp` receives more than two inputs. When this happens, it
+expects the last input to be a directory where it can copy all the files it was passed.
+Since there is no directory named `original-*.dat` in the `creatures` directory we get an
+error.
+
+Instead, we can use a **loop**
+to do some operation once for each thing in a list.
+Here's a simple example that displays the first three lines of each file in turn:
+
+~~~ {.bash}
+$ for filename in basilisk.dat unicorn.dat
+> do
+>    head -n 3 $filename
+> done
+~~~
+~~~ {.output}
+COMMON NAME: basilisk
+CLASSIFICATION: basiliscus vulgaris
+UPDATED: 1745-05-02
+COMMON NAME: unicorn
+CLASSIFICATION: equus monoceros
+UPDATED: 1738-11-24
+~~~
+
+When the shell sees the keyword `for`,
+it knows it is supposed to repeat a command (or group of commands) once for each thing in a list.
+In this case, the list is the two filenames.
+Each time through the loop,
+the name of the thing currently being operated on is assigned to
+the **variable** called `filename`.
+Inside the loop,
+we get the variable's value by putting `$` in front of it:
+`$filename` is `basilisk.dat` the first time through the loop,
+`unicorn.dat` the second,
+and so on.
+
+By using the dollar sign we are telling the shell interpreter to treat
+`filename` as a variable name and substitute its value on its place,
+but not as some text or external command. When using variables it is also 
+possible to put the names into curly braces to clearly delimit the variable
+name: `$filename` is equivalent to `${filename}`, but is different from
+`${file}name`. You may find this notation in other people's programs.
+
+Finally,
+the command that's actually being run is our old friend `head`,
+so this loop prints out the first three lines of each data file in turn.
+
+> **Follow the Prompt**
+>
+> The shell prompt changes from `$` to `>` and back again as we were
+> typing in our loop. The second prompt, `>`, is different to remind
+> us that we haven't finished typing a complete command yet. A semicolon, `;`, 
+> can be used to separate two commands written on a single line.
+
+
+
+Imagine we want to extract the second line from each `*.dat` file. Here's a slightly more complicated loop:
+
+~~~ {.bash}
+for filename in *.dat
+do
+    head -n 2 $filename | tail -n 1
+done
+~~~
+
+The shell starts by expanding `*.dat` to create the list of files it will process.
+The **loop body**
+then executes the command for each of those files.
+
+We can redirect the output of a loop to a file like we did before with `wc`:
+
+~~~ {.bash}
+for filename in *.dat
+do
+    head -n 2 $filename | tail -n 1
+done > classifications.txt
+~~~
+
+
+> **Measure Twice, Run Once**
+> 
+> A loop is a way to do many things at once --- or to make many mistakes at
+> once if it does the wrong thing. One way to check what a loop *would* do
+> is to echo the commands it would run instead of actually running them.
+> For example, we could write our file copying loop like this:
+> 
+> ~~~
+> for filename in *.dat
+> do
+>     echo cp $filename original-$filename
+> done
+> ~~~
+> 
+> Instead of running `cp`, this loop runs `echo`, which prints out:
+> 
+> ~~~
+> cp basilisk.dat original-basilisk.dat
+> cp unicorn.dat original-unicorn.dat
+> ~~~
+> 
+> *without* actually running those commands. We can then use up-arrow to
+> redisplay the loop, back-arrow to get to the word `echo`, delete it, and
+> then press Enter to run the loop with the actual `cp` commands. This
+> isn't foolproof, but it's a handy way to see what's going to happen when
+> you're still learning how loops work.
+
+
+
+# Shell scripts
+> **Learning Objectives**
+>
+> *   Write a shell script that runs a command or series of commands for a fixed set of files.
+> *   Run a shell script from the command line.
+> *   Write a shell script that operates on a set of files defined by the user on the command line.
+> *   Create pipelines that include shell scripts you, and others, have written.
+
+We are finally ready to see what makes the shell such a powerful programming environment.
+We are going to take the commands we repeat frequently and save them in files
+so that we can re-run all those operations again later by typing a single command.
+For historical reasons,
+a bunch of commands saved in a file is usually called a **shell script**,
+but make no mistake:
+these are actually small programs.
+
+Let's start by going back to `molecules/` and putting the following line into a new file, `middle.sh`:
+
+~~~ {.bash}
+$ cd molecules
+$ nano middle.sh
+~~~
+The command <code>nano middle.sh</code> opens the file `middle.sh` within the text editor "nano" (which runs within the shell). If the file does not exist, it will be created. We can use the text editor to directly edit the file. We'll simply insert the following line:
+
+~~~
+head -n 15 octane.pdb | tail -n 5
+~~~
+This is a variation on the pipe we constructed earlier:
+it selects lines 11-15 of the file `octane.pdb`.
+Remember, we are *not* running it as a command just yet:
+we are putting the commands in a file.
+
+Then we save the file (using Ctrl-O), and exit the text editor (using Ctrl-X).
+Check that the directory `molecules` now contains a file called `middle.sh`.
+
+Once we have saved the file,
+we can ask the shell to execute the commands it contains.
+Our shell is called `bash`, so we run the following command:
+
+~~~ {.bash}
+$ bash middle.sh
+~~~
+~~~ {.output}
+ATOM      9  H           1      -4.502   0.681   0.785  1.00  0.00
+ATOM     10  H           1      -5.254  -0.243  -0.537  1.00  0.00
+ATOM     11  H           1      -4.357   1.252  -0.895  1.00  0.00
+ATOM     12  H           1      -3.009  -0.741  -1.467  1.00  0.00
+ATOM     13  H           1      -3.172  -1.337   0.206  1.00  0.00
+~~~
+
+Sure enough,
+our script's output is exactly what we would get if we ran that pipeline directly.
+
+> **Text vs. Whatever**
+>
+> We usually call programs like Microsoft Word or LibreOffice Writer "text
+> editors", but we need to be a bit more careful when it comes to
+> programming. By default, Microsoft Word uses `.docx` files to store not
+> only text, but also formatting information about fonts, headings, and so
+> on. This extra information isn't stored as characters, and doesn't mean
+> anything to tools like `head`: they expect input files to contain
+> nothing but the letters, digits, and punctuation on a standard computer
+> keyboard. When editing programs, therefore, you must either use a plain
+> text editor, or be careful to save files as plain text.
+
+What if we want to select lines from an arbitrary file?
+We could edit `middle.sh` each time to change the filename,
+but that would probably take longer than just retyping the command.
+Instead,
+let's edit `middle.sh` and replace `octane.pdb` with a special variable called `$1`:
+
+~~~ {.bash}
+$ nano middle.sh
+~~~
+Now, within "nano", replace the text `octane.pdb` with the special variable called `$1`:
+
+~~~ {.output}
+head -n 15 "$1" | tail -n 5
+~~~
+
+Inside a shell script,
+`$1` means "the first filename (or other parameter) on the command line".
+We can now run our script like this:
+
+~~~ {.bash}
+$ bash middle.sh octane.pdb
+~~~
+~~~ {.output}
+ATOM      9  H           1      -4.502   0.681   0.785  1.00  0.00
+ATOM     10  H           1      -5.254  -0.243  -0.537  1.00  0.00
+ATOM     11  H           1      -4.357   1.252  -0.895  1.00  0.00
+ATOM     12  H           1      -3.009  -0.741  -1.467  1.00  0.00
+ATOM     13  H           1      -3.172  -1.337   0.206  1.00  0.00
+~~~
+
+or on a different file like this:
+
+~~~ {.bash}
+$ bash middle.sh pentane.pdb
+~~~
+~~~ {.output}
+ATOM      9  H           1       1.324   0.350  -1.332  1.00  0.00
+ATOM     10  H           1       1.271   1.378   0.122  1.00  0.00
+ATOM     11  H           1      -0.074  -0.384   1.288  1.00  0.00
+ATOM     12  H           1      -0.048  -1.362  -0.205  1.00  0.00
+ATOM     13  H           1      -1.183   0.500  -1.412  1.00  0.00
+~~~
+
+
+> **Double-Quotes Around Arguments**
+>
+> We put the `$1` inside of double-quotes in case the filename happens to contain any spaces.
+> The shell uses whitespace to separate arguments,
+> so we have to be careful when using arguments that might have whitespace in them.
+> If we left out these quotes, and `$1` expanded to a filename like
+> `methyl butane.pdb`,
+> the command in the script would effectively be:
+>
+>     head -n 15 methyl butane.pdb | tail -n 5
+>
+> This would call `head` on two separate files, `methyl` and `butane.pdb`,
+> which is probably not what we intended.
+
+
+We still need to edit `middle.sh` each time we want to adjust the range of lines,
+though.
+Let's fix that by using the special variables `$2` and `$3` for the
+number of lines to be passed to `head` and `tail` respectively:
+
+~~~ {.bash}
+$ nano middle.sh
+~~~
+~~~ {.output}
+head -n "$2" "$1" | tail -n "$3"
+~~~
+
+We can now run:
+
+~~~ {.bash}
+$ bash middle.sh pentane.pdb 15 5
+~~~
+~~~ {.output}
+ATOM      9  H           1       1.324   0.350  -1.332  1.00  0.00
+ATOM     10  H           1       1.271   1.378   0.122  1.00  0.00
+ATOM     11  H           1      -0.074  -0.384   1.288  1.00  0.00
+ATOM     12  H           1      -0.048  -1.362  -0.205  1.00  0.00
+ATOM     13  H           1      -1.183   0.500  -1.412  1.00  0.00
+~~~
+
+By changing the arguments to our command we can change our script's
+behaviour:
+
+~~~ {.bash}
+$ bash middle.sh pentane.pdb 20 5
+~~~
+~~~ {.output}
+ATOM     14  H           1      -1.259   1.420   0.112  1.00  0.00
+ATOM     15  H           1      -2.608  -0.407   1.130  1.00  0.00
+ATOM     16  H           1      -2.540  -1.303  -0.404  1.00  0.00
+ATOM     17  H           1      -3.393   0.254  -0.321  1.00  0.00
+TER      18              1
+~~~
+
+This works,
+but it may take the next person who reads `middle.sh` a moment to figure out what it does.
+We can improve our script by adding some **comments** at the top:
+
+~~~ {.bash}
+$ nano middle.sh
+~~~
+~~~ {.output}
+# Select lines from the middle of a file.
+# Usage: middle.sh filename end_line num_lines
+head -n "$2" "$1" | tail -n "$3"
+~~~
+
+A comment starts with a `#` character and runs to the end of the line.
+The computer ignores comments,
+but they're invaluable for helping people understand and use scripts.

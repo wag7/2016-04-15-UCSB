@@ -1,6 +1,7 @@
 ## Introductions
 
 - JL: beginner confidence
+  - community: [Mozilla Study Groups](https://www.mozillascience.org/introducing-mozilla-science-study-groups)
 - BB: f fwd w/ Hadley thinking revolutionized thinking
 - RD: teaching this 1 yr, but learn something new everytime
 
