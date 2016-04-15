@@ -110,6 +110,16 @@ Now you will create a Github repository for a project.
 
 1. [Clone the repository](https://help.github.com/articles/fetching-a-remote) onto your local machine. You can do this either from the Bash Shell for Git with the command `git clone https://github.com/USER/REPO.git`, replacing USER with your Github username and REPO with my_project. Or you can use the Github Desktop App menu File -> Clone Repository...
 
+## Populate with Rmarkdown
+
+- File -> New File -> Rmarkdown...
+- Save as index
+- Knit
+
+More:
+- [rmarkdown-cheatsheet.pdf](../cheatsheets/rmarkdown-cheatsheet.pdf)
+- <http://rmarkdown.rstudio.com>
+
 ## Merge Conflicts
 
 [merge conflicts](http://r-pkgs.had.co.nz/git.html#git-pull)
