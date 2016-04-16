@@ -158,6 +158,23 @@ Notice the syntax for:
 
 See [Mastering Markdown · GitHub Guides](https://guides.github.com/features/mastering-markdown/) and add some more personalized content to the README of your own, like a bulleted list or blockquote.
 
+## Create `index.html`
+
+By default `index.html` is served up. Go ahead and create a new file named `index.html` with the following [basic HTML](http://www.w3schools.com/html/html_basic.asp):
+
+```html
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>My First Heading</h1>
+
+<p>My first paragraph.</p>
+
+</body>
+</html>
+```
+
 ## Clone Repository
 
 [Clone the repository](https://help.github.com/articles/fetching-a-remote) onto your local machine. The easiest way to do this is simply clicking the button <span class="octicon octicon-desktop-download"></span> to open up the Github Desktop App.
